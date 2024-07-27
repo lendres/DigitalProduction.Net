@@ -111,9 +111,35 @@ public static class Assembly
 	}
 
 	/// <summary>
+	/// Get the calling assembly's authors.
+	/// </summary>
+	public static string Authors()
+	{
+		return Authors(System.Reflection.Assembly.GetCallingAssembly());
+	}
+
+	/// <summary>
+	/// Get the assembly's authors.
+	/// </summary>
+	public static string Authors(System.Reflection.Assembly assembly)
+	{
+		// Get all Authors attributes on this assembly.
+		object[] attributes = assembly.GetCustomAttributes(typeof(DigitalProduction.Reflection.AuthorsAttribute), false);
+
+		// If there aren't any Authors attributes, return an empty string.
+		if (attributes.Length == 0)
+		{
+			return "";
+		}
+
+		// If there is a Description attribute, return its value.
+		return ((DigitalProduction.Reflection.AuthorsAttribute)attributes[0]).Authors;
+	}
+
+	/// <summary>
 	/// Get the calling assembly's version.
 	/// </summary>
-	public static string? Version()
+	public static string Version()
 	{
 		return Version(System.Reflection.Assembly.GetCallingAssembly());
 	}
@@ -121,9 +147,9 @@ public static class Assembly
 	/// <summary>
 	/// Get the assembly version.
 	/// </summary>
-	public static string? Version(System.Reflection.Assembly assembly)
+	public static string Version(System.Reflection.Assembly assembly)
 	{
-		return assembly.GetName().Version?.ToString();
+		return assembly.GetName().Version?.ToString() ?? "";
 	}
 
 	/// <summary>
@@ -228,6 +254,58 @@ public static class Assembly
 
 		// If there is a Company attribute, return its value.
 		return ((System.Reflection.AssemblyCompanyAttribute)attributes[0]).Company;
+	}
+
+	/// <summary>
+	/// Get the calling assembly's website.
+	/// </summary>
+	public static string Website()
+	{
+		return Website(System.Reflection.Assembly.GetCallingAssembly());
+	}
+
+	/// <summary>
+	/// Get the assembly's website.
+	/// </summary>
+	public static string Website(System.Reflection.Assembly assembly)
+	{
+		// Get all the specific attributes on this assembly.
+		object[] attributes = assembly.GetCustomAttributes(typeof(DigitalProduction.Reflection.WebsiteAttribute), false);
+
+		// If there aren't any attributes, return an empty string.
+		if (attributes.Length == 0)
+		{
+			return "";
+		}
+
+		// If there is a Description attribute, return its value.
+		return ((DigitalProduction.Reflection.WebsiteAttribute)attributes[0]).Url;
+	}
+
+	/// <summary>
+	/// Get the calling assembly's location to report issues.
+	/// </summary>
+	public static string IssuesAddress()
+	{
+		return Website(System.Reflection.Assembly.GetCallingAssembly());
+	}
+
+	/// <summary>
+	/// Get the assembly location to report issues..
+	/// </summary>
+	public static string IssuesAddress(System.Reflection.Assembly assembly)
+	{
+		// Get all the specific attributes on this assembly.
+		object[] attributes = assembly.GetCustomAttributes(typeof(DigitalProduction.Reflection.IssuesAddressAttribute), false);
+
+		// If there aren't any attributes, return an empty string.
+		if (attributes.Length == 0)
+		{
+			return "";
+		}
+
+		// If there is a Description attribute, return its value.
+		return ((DigitalProduction.Reflection.IssuesAddressAttribute)attributes[0]).Url;
 	}
 
 	/// <summary>
