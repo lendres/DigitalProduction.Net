@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project>
 	<PropertyGroup>
-		<!--<Authors Condition=" '$(Authors)' == '' ">Lance A. Endres</Authors>-->
 		<Company>Digital Production</Company>
 	</PropertyGroup>
 

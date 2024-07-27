@@ -35,9 +35,7 @@ public class AssebmlyTests
 	[Fact]
 	public void AuthorsName()
 	{
-		//System.Reflection.Assembly? callingAssembly = System.Reflection.Assembly.GetCallingAssembly();
 		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
-		//System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetEntryAssembly();
 		Assert.NotNull(assembly);
 
 		string result = DigitalProduction.Reflection.Assembly.Authors(assembly);
