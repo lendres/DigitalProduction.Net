@@ -7,9 +7,12 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Digital Production Dot Net Library</Title>
+		<Authors>$(Authors)</Authors>
+		<Company>$(Company)</Company>
 	</PropertyGroup>
 
 	<!-- Import version information from the folder containing the project if the file exists -->
+	<Import Project="$(MSBuildProjectDirectory)/Assembly.props" Condition="Exists('$(MSBuildProjectDirectory)/Assembly.props')" />
 	<Import Project="$(MSBuildProjectDirectory)/Version.props" Condition="Exists('$(MSBuildProjectDirectory)/Version.props')" />
 
 	<ItemGroup>

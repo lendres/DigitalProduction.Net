@@ -111,9 +111,35 @@ public static class Assembly
 	}
 
 	/// <summary>
+	/// Get the calling assembly's authors.
+	/// </summary>
+	public static string Authors()
+	{
+		return Authors(System.Reflection.Assembly.GetCallingAssembly());
+	}
+
+	/// <summary>
+	/// Get the assembly authors.
+	/// </summary>
+	public static string Authors(System.Reflection.Assembly assembly)
+	{
+		// Get all Description attributes on this assembly.
+		object[] attributes = assembly.GetCustomAttributes(typeof(DigitalProduction.Reflection.AuthorsAttribute), false);
+
+		// If there aren't any Description attributes, return an empty string.
+		if (attributes.Length == 0)
+		{
+			return "";
+		}
+
+		// If there is a Description attribute, return its value.
+		return ((DigitalProduction.Reflection.AuthorsAttribute)attributes[0]).Authors;
+	}
+
+	/// <summary>
 	/// Get the calling assembly's version.
 	/// </summary>
-	public static string? Version()
+	public static string Version()
 	{
 		return Version(System.Reflection.Assembly.GetCallingAssembly());
 	}
@@ -121,9 +147,9 @@ public static class Assembly
 	/// <summary>
 	/// Get the assembly version.
 	/// </summary>
-	public static string? Version(System.Reflection.Assembly assembly)
+	public static string Version(System.Reflection.Assembly assembly)
 	{
-		return assembly.GetName().Version?.ToString();
+		return assembly.GetName().Version?.ToString() ?? "";
 	}
 
 	/// <summary>
