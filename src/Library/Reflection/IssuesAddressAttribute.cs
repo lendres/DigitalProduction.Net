@@ -4,23 +4,23 @@
 /// An attribute to add additional authors to the assembly.
 /// </summary>
 [AttributeUsage(AttributeTargets.Assembly)]
-public class AuthorsAttribute : Attribute
+public class IssuesAddressAttribute : Attribute
 {
 	#region Construction
 
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public AuthorsAttribute()
+	public IssuesAddressAttribute()
 	{
 	}
 
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public AuthorsAttribute(string authors)
+	public IssuesAddressAttribute(string url)
 	{
-		Authors = authors;
+		Url = url;
 	}
 
 	#endregion
@@ -30,7 +30,7 @@ public class AuthorsAttribute : Attribute
 	/// <summary>
 	/// Authors.
 	/// </summary>
-	public string Authors { get; set; } = "";
+	public string Url { get; set; } = "";
 
 	#endregion
 

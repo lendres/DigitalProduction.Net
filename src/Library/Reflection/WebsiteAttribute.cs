@@ -1,26 +1,28 @@
-﻿namespace DigitalProduction.Reflection;
+﻿using System;
+
+namespace DigitalProduction.Reflection;
 
 /// <summary>
 /// An attribute to add additional authors to the assembly.
 /// </summary>
 [AttributeUsage(AttributeTargets.Assembly)]
-public class AuthorsAttribute : Attribute
+public class WebsiteAttribute : Attribute
 {
 	#region Construction
 
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public AuthorsAttribute()
+	public WebsiteAttribute()
 	{
 	}
 
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public AuthorsAttribute(string authors)
+	public WebsiteAttribute(string url)
 	{
-		Authors = authors;
+		Url = url;
 	}
 
 	#endregion
@@ -30,7 +32,7 @@ public class AuthorsAttribute : Attribute
 	/// <summary>
 	/// Authors.
 	/// </summary>
-	public string Authors { get; set; } = "";
+	public string Url { get; set; } = "";
 
 	#endregion
 

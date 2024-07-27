@@ -9,4 +9,17 @@
 			<_Parameter1>Lance A. Endres</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
+
+
+	<ItemGroup>
+		<AssemblyAttribute Include="DigitalProduction.Reflection.WebsiteAttribute">
+			<_Parameter1>https://github.com/lendres/C-Sharp-Dot-Net-Library</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="DigitalProduction.Reflection.IssuesAddressAttribute">
+			<_Parameter1>https://github.com/lendres/C-Sharp-Dot-Net-Library/issues</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 </Project>

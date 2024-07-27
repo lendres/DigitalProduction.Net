@@ -43,6 +43,33 @@ public class AssebmlyTests
 		Assert.Equal("Lance A. Endres", result);
 	}
 
+	/// <summary>
+	/// Website test.
+	/// </summary>
+	[Fact]
+	public void Website()
+	{
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string result = DigitalProduction.Reflection.Assembly.Website(assembly);
+
+		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library", result);
+	}
+
+	/// <summary>
+	/// Issues address test.
+	/// </summary>
+	[Fact]
+	public void IssuesAddress()
+	{
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string result = DigitalProduction.Reflection.Assembly.IssuesAddress(assembly);
+
+		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library/issues", result);
+	}	
 
 	#endregion
 
