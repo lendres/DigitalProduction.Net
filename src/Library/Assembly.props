@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project>
 	<PropertyGroup>
+		<Title>C Sharp Dot Net Library</Title>
 		<Product>C Sharp Dot Net Library</Product>
 		<Copyright>Lance A. Endres</Copyright>
 		<Company>Digital Production</Company>
