@@ -29,11 +29,9 @@
 	    <PackagePath>\</PackagePath>
 	  </None>
 	</ItemGroup>
-
+	
 	<ItemGroup>
-		<Reference Include="XInclude Maui">
-			<HintPath>..\References\XInclude Maui.dll</HintPath>
-		</Reference>
+	  <PackageReference Include="XIncludeDotNet" Version="1.1.1" />
 	</ItemGroup>
 
 </Project>
