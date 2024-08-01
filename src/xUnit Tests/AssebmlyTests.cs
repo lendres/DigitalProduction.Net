@@ -66,6 +66,22 @@ public class AssebmlyTests
 		string result = DigitalProduction.Reflection.Assembly.IssuesAddress(assembly);
 
 		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library/issues", result);
+	}
+
+	/// <summary>
+	/// Version test.
+	/// </summary>
+	[Fact]
+	public void Version()
+	{
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string result	= DigitalProduction.Reflection.Assembly.Version(assembly);
+		Assert.Equal("1.1.2.0", result);
+
+		result			= DigitalProduction.Reflection.Assembly.Version(assembly, true);
+		Assert.Equal("1.1.2", result);
 	}	
 
 	#endregion
