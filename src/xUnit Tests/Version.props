@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project>
 	<PropertyGroup>
-		<Major Condition=" '$(Major)' == '' ">0</Major>
+		<Major Condition=" '$(Major)' == '' ">1</Major>
 		<Minor Condition=" '$(Minor)' == '' ">1</Minor>
 		<BuildNumber Condition=" '$(BuildNumber)' == '' ">2</BuildNumber>
 		<InformationalVersion>This is a prerelease package.</InformationalVersion>

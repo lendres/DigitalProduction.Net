@@ -147,9 +147,14 @@ public static class Assembly
 	/// <summary>
 	/// Get the assembly version.
 	/// </summary>
-	public static string Version(System.Reflection.Assembly assembly)
+	public static string Version(System.Reflection.Assembly assembly, bool threeDigit = false)
 	{
-		return assembly.GetName().Version?.ToString() ?? "";
+		string version = assembly.GetName().Version?.ToString() ?? "";
+		if (threeDigit)
+		{ 
+			version = version.Substring(0, 5);
+		}
+		return version;
 	}
 
 	/// <summary>
