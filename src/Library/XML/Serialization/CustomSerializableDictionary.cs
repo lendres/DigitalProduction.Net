@@ -13,7 +13,9 @@ namespace DigitalProduction.XML.Serialization;
 /// <typeparam name="TKey">Dictionary key type.</typeparam>
 /// <typeparam name="TValue">Dictionary value type.</typeparam>
 [XmlRoot("dictionary")]
-public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePair> : Dictionary<TKey, TValue>, IXmlSerializable where TKey : notnull
+public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePair> : Dictionary<TKey, TValue>, IXmlSerializable
+	where TKey : notnull
+	where TSerializeableKeyValuePair : ISerializableKeyValuePair<TKey, TValue>, new()
 {
 	#region Fields
 	#endregion
@@ -53,43 +55,19 @@ public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePa
 			document = XDocument.Load(subtreeReader);
 		}
 
-        if (_useTitleCase)
-        {
-			ReadItemsTitleCase(document);
-        }
-		else
-		{
-			ReadItemsLowerCase(document);
-		}
+		ReadItems(document);
 
 		reader.ReadEndElement();
 	}
 
-	private void ReadItemsTitleCase(XDocument? document)
+	private void ReadItems(XDocument? document)
 	{
-		XmlSerializer serializer = new(typeof(SerializableKeyValuePair<TKey, TValue>));
+		XmlSerializer serializer = new(typeof(TSerializeableKeyValuePair));
 
 		foreach (XElement item in document!.Elements().First().Elements(XName.Get("Item")))
 		{
 			using XmlReader itemReader = item.CreateReader();
-			if (serializer.Deserialize(itemReader) is SerializableKeyValuePairTitleCase<TKey, TValue> keyValuePair)
-			{
-				if (keyValuePair.Key != null && keyValuePair.Value != null)
-				{
-					Add(keyValuePair.Key, keyValuePair.Value);
-				}
-			}
-		}
-	}
-
-	private void ReadItemsLowerCase(XDocument? document)
-	{
-		XmlSerializer serializer = new(typeof(SerializableKeyValuePair<TKey, TValue>));
-
-		foreach (XElement item in document!.Elements().First().Elements(XName.Get("item")))
-		{
-			using XmlReader itemReader = item.CreateReader();
-			if (serializer.Deserialize(itemReader) is SerializableKeyValuePair<TKey, TValue> keyValuePair)
+			if (serializer.Deserialize(itemReader) is TSerializeableKeyValuePair keyValuePair)
 			{
 				if (keyValuePair.Key != null && keyValuePair.Value != null)
 				{
@@ -105,23 +83,19 @@ public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePa
 	/// <param name="writer">XmlWriter.</param>
 	public void WriteXml(System.Xml.XmlWriter writer)
 	{
-		XmlSerializer serializer            = new(typeof(SerializableKeyValuePair<TKey, TValue>));
+		XmlSerializer serializer            = new(typeof(TSerializeableKeyValuePair));
 		XmlSerializerNamespaces namespaces  = new();
 		namespaces.Add("", "");
 
 		foreach (TKey key in Keys)
 		{
-			TValue value												= this[key];
-			if (_useTitleCase)
+			TValue value							= this[key];
+			TSerializeableKeyValuePair keyvaluepair   = new()
 			{
-				SerializableKeyValuePairTitleCase<TKey, TValue> keyvaluepair   = new(key, value);
-				serializer.Serialize(writer, keyvaluepair, namespaces);
-			}
-			else
-			{
-				SerializableKeyValuePair<TKey, TValue> keyvaluepair   = new(key, value);
-				serializer.Serialize(writer, keyvaluepair, namespaces);
-			}
+				Key		= key,
+				Value   = value
+			};
+			serializer.Serialize(writer, keyvaluepair, namespaces);
 		}
 	}
 

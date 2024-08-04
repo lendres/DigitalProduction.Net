@@ -78,7 +78,11 @@ public class SerializableDictionary<KeyType, ValueType> : Dictionary<KeyType, Va
 		foreach (KeyType key in this.Keys)
 		{
 			ValueType value												= this[key];
-			SerializableKeyValuePair<KeyType, ValueType> keyvaluepair	= new(key, value);
+			SerializableKeyValuePair<KeyType, ValueType> keyvaluepair	= new()
+			{
+				Key		= key,
+				Value   = value
+			};
 			serializer.Serialize(writer, keyvaluepair, namespaces);
 		}
 	}

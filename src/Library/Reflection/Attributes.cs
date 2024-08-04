@@ -1,6 +1,8 @@
 using DigitalProduction.ComponentModel;
 using System.ComponentModel;
 using System.Reflection;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace DigitalProduction.Reflection;
 
@@ -212,6 +214,32 @@ public static class Attributes
 		}
 
 		return aliases;
+	}
+
+	#endregion
+
+	#region XML Attributes
+
+	public static string? GetXmlAtrribute(Type type, string propertyName)
+	{
+		string? xmlAtrribute = null;
+
+		PropertyInfo[] properties = type.GetProperties();
+
+		foreach (PropertyInfo propertyInfo in properties)
+		{
+			if (propertyInfo.Name == propertyName)
+			{
+				object[] attributes = propertyInfo.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
+				if (attributes.Length > 0)
+				{
+					xmlAtrribute = ((XmlAttributeAttribute)attributes[0]).AttributeName;
+					break;
+				}
+			}
+		}
+
+		return xmlAtrribute;
 	}
 
 	#endregion
