@@ -12,6 +12,14 @@ namespace DigitalProduction.UnitTests;
 public class AirlineCompany : Company
 {
 	#region Construction
+
+	/// <summary>
+	/// Default constructor.  Required for serialization.
+	/// </summary>
+	public AirlineCompany()
+	{
+	}
+
 	#endregion
 
 	#region Properties

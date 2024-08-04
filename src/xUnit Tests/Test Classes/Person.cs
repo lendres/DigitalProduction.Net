@@ -10,6 +10,13 @@ public class Person
 	#region Construction
 
 	/// <summary>
+	/// Default constructor.  Required for serialization.
+	/// </summary>
+	public Person()
+	{
+	}
+
+	/// <summary>
 	/// Constructor to populate fields.
 	/// </summary>
 	public Person(string name, int age, Gender gender)

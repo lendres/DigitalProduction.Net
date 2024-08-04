@@ -10,6 +10,14 @@ namespace DigitalProduction.UnitTests;
 public class Company
 {
 	#region Construction
+
+	/// <summary>
+	/// Default constructor.  Required for serialization.
+	/// </summary>
+	public Company()
+	{
+	}
+
 	#endregion
 
 	#region Properties

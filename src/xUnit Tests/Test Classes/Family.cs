@@ -15,6 +15,14 @@ namespace DigitalProduction.UnitTests;
 public class Family
 {
 	#region Construction
+
+	/// <summary>
+	/// Default constructor.  Required for serialization.
+	/// </summary>
+	public Family()
+	{
+	}
+
 	#endregion
 
 	#region Properties

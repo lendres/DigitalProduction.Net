@@ -10,6 +10,13 @@ public class Asset
 	#region Construction
 
 	/// <summary>
+	/// Default constructor.  Required for serialization.
+	/// </summary>
+	public Asset()
+	{ 
+	}
+
+	/// <summary>
 	/// Constructor.
 	/// </summary>
 	public Asset(string name, int value, string description)

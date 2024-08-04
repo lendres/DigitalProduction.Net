@@ -7,7 +7,6 @@ public class XmlTests
 {
 	#region XML Serialization
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
 	/// <summary>
 	/// Basic serialization and deserialization test.
 	/// </summary>
@@ -57,7 +56,6 @@ public class XmlTests
 
 		File.Delete(path);
 	}
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 	/// <summary>
 	/// Test the XML writer that writes full closing elements and never uses the short element close.
