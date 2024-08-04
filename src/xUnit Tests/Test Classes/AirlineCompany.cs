@@ -32,4 +32,26 @@ public class AirlineCompany : Company
 
 	#endregion
 
+	#region Static Functions
+
+	/// <summary>
+	/// Helper function to create an airline.
+	/// </summary>
+	/// <returns>A new airline populated with some default values.</returns>
+	public static AirlineCompany CreateAirline()
+	{
+		AirlineCompany company = new()
+		{
+			Name            = "Oceanic",
+			NumberOfPlanes  = 10
+		};
+		company.Employees.Add(new Person("Manager", 36, Gender.Female));
+		company.Employees.Add(new Person("Luggage Handler", 37, Gender.Male));
+		company.Employees.Add(new Person("Pilot", 28, Gender.Female));
+		company.Employees.Add(new Person("Captain", 30, Gender.Male));
+		return company;
+	}
+
+	#endregion
+
 } // End class.

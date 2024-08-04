@@ -1,5 +1,4 @@
-﻿using DigitalProduction.Reflection;
-using DigitalProduction.XML.Serialization;
+﻿using DigitalProduction.XML.Serialization;
 
 namespace DigitalProduction.UnitTests;
 
@@ -16,7 +15,7 @@ public class XmlTests
 
 		string path = Path.Combine(Path.GetTempPath(), "test1.xml");
 
-		Family family = CreateFamily();
+		Family family = Family.CreateFamily();
 
 		Serialization.SerializeObject(family, path);
 		Family? familyDeserialized = Serialization.DeserializeObject<Family>(path);
@@ -42,7 +41,7 @@ public class XmlTests
 	{
 		string path = Path.Combine(Path.GetTempPath(), "test2.xml");
 
-		AirlineCompany company = CreateAirline();
+		AirlineCompany company = AirlineCompany.CreateAirline();
 
 		company.Serialize(path);
 		AirlineCompany? deserialized = Company.Deserialize<AirlineCompany>(path);
@@ -65,7 +64,7 @@ public class XmlTests
 	{
 		string path = Path.Combine(Path.GetTempPath(), "test1.xml");
 
-		AirlineCompany company = CreateAirline();
+		AirlineCompany company = AirlineCompany.CreateAirline();
 		//company.Employees.Add(new Person("", 20, Gender.Male));
 		//company.Employees.Add(new Person(" ", 20, Gender.Male));
 		//company.Employees.Add(new Person(null, 20, Gender.Male));
@@ -88,7 +87,7 @@ public class XmlTests
 		string path1 = Path.Combine(Path.GetTempPath(), "test1.xml");
 		string path2 = Path.Combine(Path.GetTempPath(), "test2.xml");
 
-		AirlineCompany company = CreateAirline();
+		AirlineCompany company = AirlineCompany.CreateAirline();
 
 		SerializationSettings settings				= new(company, path1);
 		//settings.XmlSettings.Indent					= false;
@@ -101,72 +100,6 @@ public class XmlTests
 
 		File.Delete(path1);
 		File.Delete(path2);
-	}
-
-	#endregion
-
-	#region Attribute Tests
-
-	/// <summary>
-	/// Test retrieval of attributes.
-	/// </summary>
-	[Fact]
-	public void Attributes()
-	{
-		AirlineCompany company = CreateAirline();
-		Assert.Equal("Airline", DigitalProduction.Reflection.Attributes.GetDisplayName(company));
-		Assert.Equal("Airline", DigitalProduction.Reflection.Attributes.GetDisplayName(typeof(AirlineCompany)));
-
-		Family family = CreateFamily();
-		List<string> aliases = DigitalProduction.Reflection.Attributes.GetAliases(family);
-		Assert.Equal("Family Members", aliases[0]);
-		Assert.Equal("Relatives", aliases[1]);
-	}
-
-	/// <summary>
-	/// Test retrieval of alternate name attributes.
-	/// </summary>
-	[Fact]
-	public void AlternateNamesAttribute()
-	{
-		Assert.Equal("737", DigitalProduction.Reflection.Attributes.GetAlternateName(AirPlaneType.Boeing737, AlternateNameType.ShortName));
-		Assert.Equal("Boeing 747", DigitalProduction.Reflection.Attributes.GetAlternateName(AirPlaneType.Boeing747, AlternateNameType.LongName));
-	}
-
-	#endregion
-
-	#region Helper Function
-
-	/// <summary>
-	/// Helper function to create an airline.
-	/// </summary>
-	/// <returns>A new airline populated with some default values.</returns>
-	private static AirlineCompany CreateAirline()
-	{
-		AirlineCompany company = new()
-		{
-			Name            = "Oceanic",
-			NumberOfPlanes  = 10
-		};
-		company.Employees.Add(new Person("Manager", 36, Gender.Female));
-		company.Employees.Add(new Person("Luggage Handler", 37, Gender.Male));
-		company.Employees.Add(new Person("Pilot", 28, Gender.Female));
-		company.Employees.Add(new Person("Captain", 30, Gender.Male));
-		return company;
-	}
-
-	/// <summary>
-	/// Helper function to create a family.
-	/// </summary>
-	/// <returns>A new Family populated with some default values.</returns>
-	private static Family CreateFamily()
-	{
-		Family family = new();
-		family.Members.Add(new Person("Mom", 36, Gender.Female));
-		family.Members.Add(new Person("Dad", 37, Gender.Male));
-		family.Members.Add(new Person("Daughter", 6, Gender.Female));
-		family.Members.Add(new Person("Son", 4, Gender.Male));
-		return family;
 	}
 
 	#endregion

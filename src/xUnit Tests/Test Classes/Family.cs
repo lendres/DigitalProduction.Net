@@ -54,5 +54,23 @@ public class Family
 	}
 
 	#endregion
+	
+	#region Static Functions
+
+	/// <summary>
+	/// Helper function to create a family.
+	/// </summary>
+	/// <returns>A new Family populated with some default values.</returns>
+	public static Family CreateFamily()
+	{
+		Family family = new();
+		family.Members.Add(new Person("Mom", 36, Gender.Female));
+		family.Members.Add(new Person("Dad", 37, Gender.Male));
+		family.Members.Add(new Person("Daughter", 6, Gender.Female));
+		family.Members.Add(new Person("Son", 4, Gender.Male));
+		return family;
+	}
+
+	#endregion
 
 } // End class.
