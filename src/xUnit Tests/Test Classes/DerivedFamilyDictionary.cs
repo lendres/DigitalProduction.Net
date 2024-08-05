@@ -13,14 +13,14 @@ namespace DigitalProduction.UnitTests;
 [Alias("Family Members")]
 [Alias("Relatives")]
 [Description("A group of related people.")]
-public class FamilyDictionary
+public class DerivedFamilyDictionary : CustomSerializableDictionary<string, Person, PersonKeyValuePair>
 {
 	#region Construction
 
 	/// <summary>
 	/// Default constructor.  Required for serialization.
 	/// </summary>
-	public FamilyDictionary()
+	public DerivedFamilyDictionary()
 	{
 	}
 
@@ -32,13 +32,13 @@ public class FamilyDictionary
 	/// Number of people in the family.
 	/// </summary>
 	[XmlIgnore()]
-	public int NumberOfMembers { get => Members.Count; }
+	public int NumberOfMembers { get => Keys.Count; }
 
 	/// <summary>
 	/// Members of the family.
 	/// </summary>
-	[XmlElement("members")]
-	public CustomSerializableDictionary<string, Person, PersonKeyValuePair> Members { get; set; } = new();
+	//[XmlElement("members")]
+	//public CustomSerializableDictionary<string, Person, PersonKeyValuePair<string, Person>> Members { get; set; } = new();
 
 	#endregion
 
@@ -51,17 +51,17 @@ public class FamilyDictionary
 	/// Helper function to create a family.
 	/// </summary>
 	/// <returns>A new Family populated with some default values.</returns>
-	public static FamilyDictionary CreateFamily()
+	public static DerivedFamilyDictionary CreateFamily()
 	{
-		Family family						= Family.CreateFamily();
-		FamilyDictionary familyDictionary	= new();
+		Family family							= Family.CreateFamily();
+		DerivedFamilyDictionary derivedFamily	= new();
 
 		foreach (Person person in family)
 		{
-			familyDictionary.Members[person.Name] = person;
+			derivedFamily[person.Name] = person;
 		}
 
-		return familyDictionary;
+		return derivedFamily;
 	}
 
 	#endregion

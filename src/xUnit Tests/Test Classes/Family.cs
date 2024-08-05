@@ -1,4 +1,5 @@
 ﻿using DigitalProduction.ComponentModel;
+using System.Collections;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -12,7 +13,7 @@ namespace DigitalProduction.UnitTests;
 [Alias("Family Members")]
 [Alias("Relatives")]
 [Description("A group of related people.")]
-public class Family
+public class Family : IEnumerable<Person>
 {
 	#region Construction
 
@@ -51,6 +52,33 @@ public class Family
 	public Person? GetPerson(string name)
 	{
 		return Members.Find(x => x.Name == name);
+	}
+
+	/// <summary>
+	/// Enumerate on the family.
+	/// </summary>
+	/// <returns>An enumerator of the family members.</returns>
+	public IEnumerator<Person> GetEnumerator()
+	{
+		return Members.GetEnumerator(); 
+	}
+
+	/// <summary>
+	/// Enumerate on the family.
+	/// </summary>
+	/// <returns>An enumerator of the family members.</returns>
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return Members.GetEnumerator(); 
+	}
+
+	/// <summary>
+	/// Add a person.  Required for serialization with an IEnumerable.
+	/// </summary>
+	/// <param name="person">Person.</param>
+	public void Add(System.Object person)
+	{
+		Members.Add((Person)person);
 	}
 
 	#endregion

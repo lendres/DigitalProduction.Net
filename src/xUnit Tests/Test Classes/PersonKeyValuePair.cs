@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using System.Xml;
+using DigitalProduction.UnitTests;
 
 namespace DigitalProduction.XML.Serialization;
 
@@ -12,17 +13,17 @@ namespace DigitalProduction.XML.Serialization;
 /// <typeparam name="TKey">Dictionary key type.</typeparam>
 /// <typeparam name="TValue">Dictionary value type.</typeparam>
 [XmlRoot("person")]
-public class PersonKeyValuePair<TKey, TValue> : ISerializableKeyValuePair<TKey, TValue> where TKey : notnull
+public class PersonKeyValuePair : ISerializableKeyValuePair<string, Person>
 {
 	#region Fields
 
 	/// <summary>Dictionary key.</summary>
 	[XmlAttribute("name")]
-	public TKey? Key { get; set; } = default;
+	public string? Key { get; set; } = default;
 
 	/// <summary>Dictionary value.</summary>
 	[XmlElement("person")]
-	public TValue? Value  { get; set; }
+	public Person? Value  { get; set; }
 
 	#endregion
 

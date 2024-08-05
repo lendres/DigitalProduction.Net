@@ -102,19 +102,44 @@ public class XmlTests
 		File.Delete(path2);
 	}
 
-		/// <summary>
-	/// Serialization settings.
+	/// <summary>
+	/// Custom dictionary test.
 	/// </summary>
 	[Fact]
 	public void CustomDictionaryTest()
 	{
-		string path1 = Path.Combine(Path.GetTempPath(), "familydictionary.xml");
+		string path = Path.Combine(Path.GetTempPath(), "familydictionary.xml");
 
 		FamilyDictionary family = FamilyDictionary.CreateFamily();
 
-		Serialization.SerializeObject(family, path1);
+		Serialization.SerializeObject(family, path);
 
-		File.Delete(path1);
+		FamilyDictionary? familyDeserialized = Serialization.DeserializeObject<FamilyDictionary>(path);
+	
+		Assert.True(familyDeserialized != null);
+		Assert.Equal(family.NumberOfMembers, familyDeserialized.NumberOfMembers);
+
+		File.Delete(path);
+	}
+
+	/// <summary>
+	/// Derived custom dictionary test.
+	/// </summary>
+	[Fact]
+	public void DerivedCustomDictionaryTest()
+	{
+		string path = Path.Combine(Path.GetTempPath(), "familydictionary.xml");
+
+		DerivedFamilyDictionary family = DerivedFamilyDictionary.CreateFamily();
+
+		Serialization.SerializeObject(family, path);
+
+		DerivedFamilyDictionary? familyDeserialized = Serialization.DeserializeObject<DerivedFamilyDictionary>(path);
+	
+		Assert.True(familyDeserialized != null);
+		Assert.Equal(family.NumberOfMembers, familyDeserialized.NumberOfMembers);
+
+		File.Delete(path);
 	}
 
 	#endregion
