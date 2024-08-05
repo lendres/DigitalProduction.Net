@@ -31,7 +31,9 @@ public class SerializableKeyValuePair<TKey, TValue> : ISerializableKeyValuePair<
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public SerializableKeyValuePair() {}
+	public SerializableKeyValuePair()
+	{
+	}
 
 	#endregion
 

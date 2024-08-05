@@ -13,7 +13,9 @@ namespace DigitalProduction.XML.Serialization;
 /// <typeparam name="TKey">Dictionary key type.</typeparam>
 /// <typeparam name="TValue">Dictionary value type.</typeparam>
 [XmlRoot("dictionary")]
-public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePair> : Dictionary<TKey, TValue>, IXmlSerializable
+public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePair> :
+	Dictionary<TKey, TValue>,
+	IXmlSerializable
 	where TKey : notnull
 	where TSerializeableKeyValuePair : ISerializableKeyValuePair<TKey, TValue>, new()
 {
