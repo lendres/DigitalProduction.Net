@@ -21,8 +21,8 @@ public class Asset
 	/// </summary>
 	public Asset(string name, int value, string description)
 	{
-		Name			= name;
-		Value			= value;
+		Name		= name;
+		Value		= value;
 		Description	= description;
 	}
 

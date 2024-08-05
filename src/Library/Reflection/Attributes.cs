@@ -1,6 +1,8 @@
 using DigitalProduction.ComponentModel;
 using System.ComponentModel;
 using System.Reflection;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace DigitalProduction.Reflection;
 
@@ -212,6 +214,67 @@ public static class Attributes
 		}
 
 		return aliases;
+	}
+
+	#endregion
+
+	#region XML Attributes
+
+	public static string? GetPropertyXmlAtrributeName(Type type, string propertyName)
+	{
+		string? xmlAtrribute = null;
+
+		PropertyInfo[] properties = type.GetProperties();
+
+		foreach (PropertyInfo propertyInfo in properties)
+		{
+			if (propertyInfo.Name == propertyName)
+			{
+				object[] attributes = propertyInfo.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
+				if (attributes.Length > 0)
+				{
+					xmlAtrribute = ((XmlAttributeAttribute)attributes[0]).AttributeName;
+					break;
+				}
+			}
+		}
+
+		return xmlAtrribute;
+	}
+
+	public static string? GetPropertyXmlElementName(Type type, string propertyName)
+	{
+		string? xmlElement = null;
+
+		PropertyInfo[] properties = type.GetProperties();
+
+		foreach (PropertyInfo propertyInfo in properties)
+		{
+			if (propertyInfo.Name == propertyName)
+			{
+				object[] attributes = propertyInfo.GetCustomAttributes(typeof(XmlElementAttribute), false);
+				if (attributes.Length > 0)
+				{
+					xmlElement = ((XmlElementAttribute)attributes[0]).ElementName;
+					break;
+				}
+			}
+		}
+
+		return xmlElement;
+	}
+
+	public static string? GetXmlRoot(Type type)
+	{
+		string? xmlElement = null;
+
+		object[] attributes = type.GetCustomAttributes(typeof(XmlRootAttribute), false);
+		if (attributes.Length > 0)
+		{
+			xmlElement = ((XmlRootAttribute)attributes[0]).ElementName;
+		}
+
+		return xmlElement;
 	}
 
 	#endregion

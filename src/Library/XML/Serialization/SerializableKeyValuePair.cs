@@ -9,20 +9,20 @@ namespace DigitalProduction.XML.Serialization;
 /// From:
 /// http://stackoverflow.com/questions/495647/serialize-class-containing-dictionary-member
 /// </summary>
-/// <typeparam name="KeyType">Dictionary key type.</typeparam>
-/// <typeparam name="ValueType">Dictionary value type.</typeparam>
+/// <typeparam name="TKey">Dictionary key type.</typeparam>
+/// <typeparam name="TValue">Dictionary value type.</typeparam>
 [XmlRoot("item")]
-public class SerializableKeyValuePair<KeyType, ValueType> where KeyType : notnull
+public class SerializableKeyValuePair<TKey, TValue> : ISerializableKeyValuePair<TKey, TValue> where TKey : notnull
 {
 	#region Fields
 
 	/// <summary>Dictionary key.</summary>
 	[XmlAttribute("key")]
-	public KeyType? Key			= default;
+	public TKey? Key { get; set; } = default;
 
 	/// <summary>Dictionary value.</summary>
 	[XmlElement("value")]
-	public ValueType? Value;
+	public TValue? Value  { get; set; }
 
 	#endregion
 
@@ -31,17 +31,8 @@ public class SerializableKeyValuePair<KeyType, ValueType> where KeyType : notnul
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public SerializableKeyValuePair() {}
-
-	/// <summary>
-	/// Constructor for initialzing values.
-	/// </summary>
-	/// <param name="key">Dictionary key.</param>
-	/// <param name="value">Dictionary value.</param>
-	public SerializableKeyValuePair(KeyType key, ValueType value)
+	public SerializableKeyValuePair()
 	{
-		Key		= key;
-		Value	= value;
 	}
 
 	#endregion

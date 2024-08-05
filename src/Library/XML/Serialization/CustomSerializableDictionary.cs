@@ -10,17 +10,24 @@ namespace DigitalProduction.XML.Serialization;
 /// From:
 /// http://stackoverflow.com/questions/495647/serialize-class-containing-dictionary-member
 /// </summary>
-/// <typeparam name="KeyType">Dictionary key type.</typeparam>
-/// <typeparam name="ValueType">Dictionary value type.</typeparam>
+/// <typeparam name="TKey">Dictionary key type.</typeparam>
+/// <typeparam name="TValue">Dictionary value type.</typeparam>
 [XmlRoot("dictionary")]
-public class SerializableDictionary<KeyType, ValueType> : Dictionary<KeyType, ValueType>, IXmlSerializable where KeyType : notnull
+public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePair> :
+	Dictionary<TKey, TValue>,
+	IXmlSerializable
+	where TKey : notnull
+	where TSerializeableKeyValuePair : ISerializableKeyValuePair<TKey, TValue>, new()
 {
+	#region Fields
+	#endregion
+
 	#region Construction
 
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public SerializableDictionary()
+	public CustomSerializableDictionary()
 	{
 	}
 
@@ -49,12 +56,23 @@ public class SerializableDictionary<KeyType, ValueType> : Dictionary<KeyType, Va
 		{
 			document = XDocument.Load(subtreeReader);
 		}
-		
-		XmlSerializer serializer = new(typeof(SerializableKeyValuePair<KeyType, ValueType>));
-		foreach (XElement item in document.Elements().First().Elements(XName.Get("item")))
+
+		ReadItems(document);
+
+		reader.ReadEndElement();
+	}
+
+	private void ReadItems(XDocument? document)
+	{
+		XmlSerializer serializer = new(typeof(TSerializeableKeyValuePair));
+
+		string? elementName = DigitalProduction.Reflection.Attributes.GetXmlRoot(typeof(TSerializeableKeyValuePair));
+		System.Diagnostics.Debug.Assert(elementName != null);
+
+		foreach (XElement item in document!.Elements().First().Elements(XName.Get(elementName)))
 		{
 			using XmlReader itemReader = item.CreateReader();
-			if (serializer.Deserialize(itemReader) is SerializableKeyValuePair<KeyType, ValueType> keyValuePair)
+			if (serializer.Deserialize(itemReader) is TSerializeableKeyValuePair keyValuePair)
 			{
 				if (keyValuePair.Key != null && keyValuePair.Value != null)
 				{
@@ -62,7 +80,6 @@ public class SerializableDictionary<KeyType, ValueType> : Dictionary<KeyType, Va
 				}
 			}
 		}
-		reader.ReadEndElement();
 	}
 
 	/// <summary>
@@ -71,14 +88,14 @@ public class SerializableDictionary<KeyType, ValueType> : Dictionary<KeyType, Va
 	/// <param name="writer">XmlWriter.</param>
 	public void WriteXml(System.Xml.XmlWriter writer)
 	{
-		XmlSerializer serializer            = new(typeof(SerializableKeyValuePair<KeyType, ValueType>));
+		XmlSerializer serializer            = new(typeof(TSerializeableKeyValuePair));
 		XmlSerializerNamespaces namespaces  = new();
 		namespaces.Add("", "");
 
-		foreach (KeyType key in this.Keys)
+		foreach (TKey key in Keys)
 		{
-			ValueType value												= this[key];
-			SerializableKeyValuePair<KeyType, ValueType> keyvaluepair	= new()
+			TValue value							= this[key];
+			TSerializeableKeyValuePair keyvaluepair   = new()
 			{
 				Key		= key,
 				Value   = value
