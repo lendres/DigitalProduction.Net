@@ -242,6 +242,28 @@ public static class Attributes
 		return xmlAtrribute;
 	}
 
+	public static string? GetXmlElement(Type type, string propertyName)
+	{
+		string? xmlElement = null;
+
+		PropertyInfo[] properties = type.GetProperties();
+
+		foreach (PropertyInfo propertyInfo in properties)
+		{
+			if (propertyInfo.Name == propertyName)
+			{
+				object[] attributes = propertyInfo.GetCustomAttributes(typeof(XmlElementAttribute), false);
+				if (attributes.Length > 0)
+				{
+					xmlElement = ((XmlElementAttribute)attributes[0]).ElementName;
+					break;
+				}
+			}
+		}
+
+		return xmlElement;
+	}
+
 	#endregion
 
 	#region Generic
