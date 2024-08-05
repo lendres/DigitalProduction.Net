@@ -5,20 +5,15 @@ using DigitalProduction.UnitTests;
 namespace DigitalProduction.XML.Serialization;
 
 /// <summary>
-/// Add serialization to a dictionary.
-/// 
-/// From:
-/// http://stackoverflow.com/questions/495647/serialize-class-containing-dictionary-member
+/// Person key value pair.
 /// </summary>
-/// <typeparam name="TKey">Dictionary key type.</typeparam>
-/// <typeparam name="TValue">Dictionary value type.</typeparam>
-[XmlRoot("person")]
+[XmlRoot("personkeyvaluepair")]
 public class PersonKeyValuePair : ISerializableKeyValuePair<string, Person>
 {
 	#region Fields
 
 	/// <summary>Dictionary key.</summary>
-	[XmlAttribute("name")]
+	[XmlElement("name")]
 	public string? Key { get; set; } = default;
 
 	/// <summary>Dictionary value.</summary>

@@ -66,7 +66,7 @@ public class CustomSerializableDictionary<TKey, TValue, TSerializeableKeyValuePa
 	{
 		XmlSerializer serializer = new(typeof(TSerializeableKeyValuePair));
 
-		string? elementName = DigitalProduction.Reflection.Attributes.GetXmlElement(typeof(TSerializeableKeyValuePair), "Value");
+		string? elementName = DigitalProduction.Reflection.Attributes.GetXmlRoot(typeof(TSerializeableKeyValuePair));
 		System.Diagnostics.Debug.Assert(elementName != null);
 
 		foreach (XElement item in document!.Elements().First().Elements(XName.Get(elementName)))

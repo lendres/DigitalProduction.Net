@@ -220,7 +220,7 @@ public static class Attributes
 
 	#region XML Attributes
 
-	public static string? GetXmlAtrribute(Type type, string propertyName)
+	public static string? GetPropertyXmlAtrributeName(Type type, string propertyName)
 	{
 		string? xmlAtrribute = null;
 
@@ -242,7 +242,7 @@ public static class Attributes
 		return xmlAtrribute;
 	}
 
-	public static string? GetXmlElement(Type type, string propertyName)
+	public static string? GetPropertyXmlElementName(Type type, string propertyName)
 	{
 		string? xmlElement = null;
 
@@ -259,6 +259,19 @@ public static class Attributes
 					break;
 				}
 			}
+		}
+
+		return xmlElement;
+	}
+
+	public static string? GetXmlRoot(Type type)
+	{
+		string? xmlElement = null;
+
+		object[] attributes = type.GetCustomAttributes(typeof(XmlRootAttribute), false);
+		if (attributes.Length > 0)
+		{
+			xmlElement = ((XmlRootAttribute)attributes[0]).ElementName;
 		}
 
 		return xmlElement;
