@@ -102,6 +102,21 @@ public class XmlTests
 		File.Delete(path2);
 	}
 
+		/// <summary>
+	/// Serialization settings.
+	/// </summary>
+	[Fact]
+	public void CustomDictionaryTest()
+	{
+		string path1 = Path.Combine(Path.GetTempPath(), "familydictionary.xml");
+
+		FamilyDictionary family = FamilyDictionary.CreateFamily();
+
+		Serialization.SerializeObject(family, path1);
+
+		File.Delete(path1);
+	}
+
 	#endregion
 
 } // End class.
