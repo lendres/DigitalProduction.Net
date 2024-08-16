@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using DigitalProduction.Strings;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -171,9 +172,23 @@ public static class Format
 	/// Returns the DateTime as a formatted string with factions of seconds included.
 	/// </summary>
 	/// <param name="dateTime">DateTime to format.</param>
-	public static string DateTimeWithPreciseSeconds(DateTime dateTime)
+	public static string DateTimeWithPreciseSeconds(DateTime dateTime, DateTimePrecisionFormat format)
 	{
-		return dateTime.ToString("M/dd/yyyy h:mm:ss.fffffff");
+		switch (format)
+		{
+			case DateTimePrecisionFormat.Descending:
+			return dateTime.ToString("yyyy/M/dd H:mm:ss.fffffff");
+
+			case DateTimePrecisionFormat.International:
+				return dateTime.ToString("dd/M/yyyy H:mm:ss.fffffff");
+
+			case DateTimePrecisionFormat.US12Hour:
+				return dateTime.ToString("M/dd/yyyy h:mm:ss.fffffff tt");
+
+			case DateTimePrecisionFormat.US24Hour:
+				return dateTime.ToString("M/dd/yyyy H:mm:ss.fffffff");
+		}
+		throw new ArgumentException("Unsupported DateTimePrecisionFormat.");		
 	}
 
 	/// <summary>
