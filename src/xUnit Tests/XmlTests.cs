@@ -57,6 +57,29 @@ public class XmlTests
 	}
 
 	/// <summary>
+	/// Test file 
+	/// </summary>
+	[Fact]
+
+	public void XmlRepeatedSerializationDeserialization()
+	{
+		string path = Path.Combine(Path.GetTempPath(), "testrepeated.xml");
+
+		AirlineCompany company = AirlineCompany.CreateAirline();
+
+		for (int i = 0; i < 4; i++)
+		{
+			company.Serialize(path);
+			AirlineCompany? deserialized = Company.Deserialize<AirlineCompany>(path);
+			Assert.NotNull(deserialized);
+			deserialized = Company.Deserialize<AirlineCompany>(path);
+			Assert.NotNull(deserialized);
+		}
+
+		File.Delete(path);
+	}
+
+	/// <summary>
 	/// Test the XML writer that writes full closing elements and never uses the short element close.
 	/// </summary>
 	[Fact]
