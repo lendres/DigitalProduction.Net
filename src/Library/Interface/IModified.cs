@@ -29,7 +29,7 @@ namespace DigitalProduction.Interface;
 /// <summary>
 /// Access for manually firing event for external sources.
 /// </summary>
-/// private void RaiseOnModifiedChangedEvent() => OnModifiedChanged?.Invoke()
+/// private void RaiseOnModifiedChangedEvent() => OnModifiedChanged?.Invoke();
 /// </summary>
 public interface IModified
 {
