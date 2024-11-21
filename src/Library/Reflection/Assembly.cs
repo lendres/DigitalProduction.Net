@@ -124,7 +124,7 @@ public static class Assembly
 	public static string Authors(System.Reflection.Assembly assembly)
 	{
 		// Get all Authors attributes on this assembly.
-		object[] attributes = assembly.GetCustomAttributes(typeof(DigitalProduction.Reflection.AuthorsAttribute), false);
+		object[] attributes = assembly.GetCustomAttributes(typeof(AuthorsAttribute), false);
 
 		// If there aren't any Authors attributes, return an empty string.
 		if (attributes.Length == 0)
@@ -133,7 +133,7 @@ public static class Assembly
 		}
 
 		// If there is a Description attribute, return its value.
-		return ((DigitalProduction.Reflection.AuthorsAttribute)attributes[0]).Authors;
+		return ((AuthorsAttribute)attributes[0]).Authors;
 	}
 
 	/// <summary>
@@ -275,7 +275,7 @@ public static class Assembly
 	public static string Website(System.Reflection.Assembly assembly)
 	{
 		// Get all the specific attributes on this assembly.
-		object[] attributes = assembly.GetCustomAttributes(typeof(DigitalProduction.Reflection.WebsiteAttribute), false);
+		object[] attributes = assembly.GetCustomAttributes(typeof(WebsiteAttribute), false);
 
 		// If there aren't any attributes, return an empty string.
 		if (attributes.Length == 0)
@@ -284,7 +284,7 @@ public static class Assembly
 		}
 
 		// If there is a Description attribute, return its value.
-		return ((DigitalProduction.Reflection.WebsiteAttribute)attributes[0]).Url;
+		return ((WebsiteAttribute)attributes[0]).Url;
 	}
 
 	/// <summary>
@@ -292,7 +292,7 @@ public static class Assembly
 	/// </summary>
 	public static string IssuesAddress()
 	{
-		return Website(System.Reflection.Assembly.GetCallingAssembly());
+		return IssuesAddress(System.Reflection.Assembly.GetCallingAssembly());
 	}
 
 	/// <summary>
@@ -301,7 +301,7 @@ public static class Assembly
 	public static string IssuesAddress(System.Reflection.Assembly assembly)
 	{
 		// Get all the specific attributes on this assembly.
-		object[] attributes = assembly.GetCustomAttributes(typeof(DigitalProduction.Reflection.IssuesAddressAttribute), false);
+		object[] attributes = assembly.GetCustomAttributes(typeof(IssuesAddressAttribute), false);
 
 		// If there aren't any attributes, return an empty string.
 		if (attributes.Length == 0)
@@ -310,7 +310,33 @@ public static class Assembly
 		}
 
 		// If there is a Description attribute, return its value.
-		return ((DigitalProduction.Reflection.IssuesAddressAttribute)attributes[0]).Url;
+		return ((IssuesAddressAttribute)attributes[0]).Url;
+	}
+
+	/// <summary>
+	/// Get the calling assembly's documentation address.
+	/// </summary>
+	public static string DocumentationAddress()
+	{
+		return Website(System.Reflection.Assembly.GetCallingAssembly());
+	}
+
+	/// <summary>
+	/// Get the assembly location to report issues..
+	/// </summary>
+	public static string DocumentationAddress(System.Reflection.Assembly assembly)
+	{
+		// Get all the specific attributes on this assembly.
+		object[] attributes = assembly.GetCustomAttributes(typeof(DocumentationAddressAttribute), false);
+
+		// If there aren't any attributes, return an empty string.
+		if (attributes.Length == 0)
+		{
+			return "";
+		}
+
+		// If there is a Description attribute, return its value.
+		return ((DocumentationAddressAttribute)attributes[0]).Url;
 	}
 
 	/// <summary>
