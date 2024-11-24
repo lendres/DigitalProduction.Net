@@ -1,6 +1,4 @@
-﻿using DigitalProduction.Delegates;
-
-namespace DigitalProduction.Interface;
+﻿namespace DigitalProduction.Interface;
 
 /// <summary>
 /// Interface for a class that can track when it has been modified or saved and raise an event when it gets modified.
@@ -11,7 +9,7 @@ namespace DigitalProduction.Interface;
 /// <summary>
 /// Event for when the object was modified.
 /// </summary>
-/// public event NoArgumentsEventHandler? OnModifiedChanged;
+/// public event ModifiedEventHandler? OnModifiedChanged;
 /// 
 /// <summary>
 /// Specifies if the project has been modified since last being saved/loaded.
