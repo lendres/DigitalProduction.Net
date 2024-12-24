@@ -1,24 +1,24 @@
 ﻿namespace DigitalProduction.Reflection;
 
 /// <summary>
-/// An attribute to the assembly to add an address for reporting issues.
+/// An attribute to the assembly to add an address for documentation/help.
 /// </summary>
 [AttributeUsage(AttributeTargets.Assembly)]
-public class IssuesAddressAttribute : Attribute
+public class DocumentationAddressAttribute : Attribute
 {
 	#region Construction
 
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public IssuesAddressAttribute()
+	public DocumentationAddressAttribute()
 	{
 	}
 
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	public IssuesAddressAttribute(string url)
+	public DocumentationAddressAttribute(string url)
 	{
 		Url = url;
 	}

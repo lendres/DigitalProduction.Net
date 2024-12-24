@@ -3,7 +3,7 @@
 /// <summary>
 /// Test cases the the Mathmatics namespace.
 /// </summary>
-public class AssebmlyTests
+public class AssemblyTests
 {
 	#region Members
 	#endregion
@@ -66,6 +66,20 @@ public class AssebmlyTests
 		string result = DigitalProduction.Reflection.Assembly.IssuesAddress(assembly);
 
 		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library/issues", result);
+	}
+
+	/// <summary>
+	/// Issues address test.
+	/// </summary>
+	[Fact]
+	public void DocumentationAddress()
+	{
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string result = DigitalProduction.Reflection.Assembly.DocumentationAddress(assembly);
+
+		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library/wiki", result);
 	}
 
 	/// <summary>

@@ -134,7 +134,8 @@ public static partial class Path
 		}
 
 		// The next thing to check is that the directory exists.
-		if (!System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(path)))
+		string? directory = System.IO.Path.GetDirectoryName(path);
+		if (!(directory == null || directory == "") && !System.IO.Directory.Exists(directory))
 		{
 			return false;
 		}

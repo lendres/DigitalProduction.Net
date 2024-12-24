@@ -16,8 +16,8 @@
 	</PropertyGroup>
 
 	<!-- Import version information from the folder containing the project if the file exists -->
-	<Import Project="$(MSBuildProjectDirectory)/Assembly.props" Condition="Exists('$(MSBuildProjectDirectory)/Assembly.props')" />
-	<Import Project="$(MSBuildProjectDirectory)/Version.props" Condition="Exists('$(MSBuildProjectDirectory)/Version.props')" />
+	<Import Project="$(MSBuildProjectDirectory)/Publishing/Assembly.props" Condition="Exists('$(MSBuildProjectDirectory)/Publishing/Assembly.props')" />
+	<Import Project="$(MSBuildProjectDirectory)/Publishing/Version.props" Condition="Exists('$(MSBuildProjectDirectory)/Publishing/Version.props')" />
 	
 	<ItemGroup>
 	  <None Include="..\..\LICENSE">
@@ -31,6 +31,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <PackageReference Include="Google.Apis.CustomSearchAPI.v1" Version="1.68.0.3520" />
+	  <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
 	  <PackageReference Include="XIncludeDotNet" Version="1.1.1" />
 	</ItemGroup>
 
