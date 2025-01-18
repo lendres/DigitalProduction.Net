@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project>
 	<PropertyGroup>
-		<Title>Digital Production Dot Net Library</Title>
-		<Product>DigitalProduction.Net Library</Product>
+		<Title>DigitalProduction.Net</Title>
+		<Product>DigitalProduction.Net</Product>
 		<Copyright>Lance A. Endres</Copyright>
 		<Company>Digital Production</Company>
 		<Description>A collection of C# classes, utilities, and algorithms.</Description>
