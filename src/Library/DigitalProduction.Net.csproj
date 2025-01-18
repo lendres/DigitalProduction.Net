@@ -13,6 +13,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>C#;.Net</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<Title>Digital Production.Net Library</Title>
 	</PropertyGroup>
 
 	<!-- Import version information from the folder containing the project if the file exists -->
@@ -31,6 +32,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <PackageReference Include="DigitalProduction.Xml.XInclude" Version="1.1.2" />
 	  <PackageReference Include="Google.Apis.CustomSearchAPI.v1" Version="1.68.0.3520" />
 	  <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
 	  <PackageReference Include="XIncludeDotNet" Version="1.1.1" />
