@@ -13,7 +13,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>C#;.Net</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Title>Digital Production.Net Library</Title>
+		<Title>DigitalProduction.Net Library</Title>
 	</PropertyGroup>
 
 	<!-- Import version information from the folder containing the project if the file exists -->
