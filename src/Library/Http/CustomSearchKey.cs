@@ -1,5 +1,4 @@
 ﻿using DigitalProduction.XML.Serialization;
-using System;
 using System.Xml.Serialization;
 
 namespace DigitalProduction.Http;
@@ -81,7 +80,7 @@ public class CustomSearchKey
 	/// Create an instance from a file.
 	/// </summary>
 	/// <param name="path">The file to read from.</param>
-	public static CustomSearchKey Deserialize(string path)
+	public static CustomSearchKey? Deserialize(string path)
 	{
 		return Serialization.DeserializeObject<CustomSearchKey>(path);
 	}

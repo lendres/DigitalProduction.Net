@@ -12,13 +12,13 @@ public static class CustomSearch
 	#region Fields
 
 	// The custom search engine identifier.
-	private static string                       _cx             = "";
+	private static string						_cx				= "";
 
 	// API Key.
 	private static string						_apiKey			= "";
 
 	// The seach service.
-	private static CustomSearchAPIService       _service        = null;
+	private static CustomSearchAPIService?		_service		= null;
 
 	#endregion
 
@@ -73,8 +73,8 @@ public static class CustomSearch
 	/// <param name="cx">Custom search engine identifier.</param>
 	public static void SetCxAndKey(string cx, string apiKey)
 	{
-		CustomSearch.Cx     = cx;
-		CustomSearch.ApiKey = apiKey;
+		CustomSearch.Cx		= cx;
+		CustomSearch.ApiKey	= apiKey;
 	}
 
 	/// <summary>
@@ -83,8 +83,8 @@ public static class CustomSearch
 	/// <param name="customSearchKey">Custom search key object.</param>
 	public static void SetCxAndKey(CustomSearchKey customSearchKey)
 	{
-		CustomSearch.Cx     = customSearchKey.Cx;
-		CustomSearch.ApiKey = customSearchKey.ApiKey;
+		CustomSearch.Cx		= customSearchKey.Cx;
+		CustomSearch.ApiKey	= customSearchKey.ApiKey;
 	}
 
 	private static void CreateService()
@@ -92,8 +92,8 @@ public static class CustomSearch
 		_service = new CustomSearchAPIService(
 			new BaseClientService.Initializer
 			{
-				ApplicationName = "Custom Search",
-				ApiKey          = _apiKey,
+				ApplicationName	= "Custom Search",
+				ApiKey			= _apiKey,
 			}
 		);
 	}

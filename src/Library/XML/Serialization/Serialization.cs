@@ -31,7 +31,7 @@ public static class Serialization
 	/// <param name="outputFile">Output file.</param>
 	public static void SerializeObject(object objectToSerialize, string outputFile)
 	{
-		SerializationSettings settings	= new(objectToSerialize, outputFile);
+		SerializationSettings settings = new(objectToSerialize, outputFile);
 		SerializeObject(settings);
 	}
 
@@ -41,10 +41,9 @@ public static class Serialization
 	/// <param name="settings">SerializationSettings to use for writing.</param>
 	public static void SerializeObjectFullEndElement(SerializationSettings settings)
 	{
-		XmlSerializer serializer					= new(settings.SerializeType);
-
-		XmlTextWriterFullEndElement textwriter		= new(settings.OutputFile, settings.XmlSettings);
-		XmlWriter xmlwriter							= XmlTextWriterFullEndElement.Create(textwriter, settings.XmlSettings);
+		XmlSerializer serializer				= new(settings.SerializeType);
+		XmlTextWriterFullEndElement textwriter	= new(settings.OutputFile, settings.XmlSettings);
+		XmlWriter xmlwriter						= XmlTextWriterFullEndElement.Create(textwriter, settings.XmlSettings);
 
 		serializer.Serialize(xmlwriter, settings.SerializeObject);
 		xmlwriter.Close();
@@ -57,7 +56,7 @@ public static class Serialization
 	/// <param name="outputFile">Output file.</param>
 	public static void SerializeObjectFullEndElement(object objectToSerialize, string outputFile)
 	{
-		SerializationSettings settings	= new(objectToSerialize, outputFile);
+		SerializationSettings settings = new(objectToSerialize, outputFile);
 		SerializeObjectFullEndElement(settings);
 	}
 
@@ -72,10 +71,9 @@ public static class Serialization
 	/// <param name="file">File to deserialize from.</param>
 	public static T? DeserializeObject<T>(string file)
 	{
-		XmlSerializer serializer            = new(typeof(T));
-
-		XIncludingReader xmlincludingreader = new(file);
-		T? deserializedobject                = (T?)serializer.Deserialize(xmlincludingreader);
+		XmlSerializer serializer			= new(typeof(T));
+		XIncludingReader xmlincludingreader	= new(file);
+		T? deserializedobject				= (T?)serializer.Deserialize(xmlincludingreader);
 		xmlincludingreader.Close();
 
 		return deserializedobject;
