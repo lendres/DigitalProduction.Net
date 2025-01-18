@@ -1,6 +1,6 @@
 using System.Xml;
 
-namespace DigitalProduction.XML;
+namespace DigitalProduction.Xml;
 
 /// <summary>
 /// Summary description for XMLTextProcessor.

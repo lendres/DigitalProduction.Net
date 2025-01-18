@@ -1,8 +1,8 @@
-using GotDotNet.XInclude;
+using DigitalProduction.Xml.XInclude;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace DigitalProduction.XML.Serialization;
+namespace DigitalProduction.Xml.Serialization;
 
 /// <summary>
 /// Summary not provided for the class Serialization.

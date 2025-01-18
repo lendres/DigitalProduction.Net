@@ -1,4 +1,4 @@
-namespace DigitalProduction.XML;
+namespace DigitalProduction.Xml;
 
 /// <summary>
 /// An XML data handler.

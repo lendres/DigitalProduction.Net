@@ -1,4 +1,4 @@
-namespace DigitalProduction.XML;
+namespace DigitalProduction.Xml;
 
 /// <summary>
 /// A list of handlers.

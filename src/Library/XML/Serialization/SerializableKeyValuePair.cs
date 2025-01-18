@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 using System.Xml;
 
-namespace DigitalProduction.XML.Serialization;
+namespace DigitalProduction.Xml.Serialization;
 
 /// <summary>
 /// Add serialization to a dictionary.
