@@ -59,6 +59,16 @@ public class Company
 	{
 		return Employees.Find(x => x.Name == name);
 	}
+
+	/// <summary>
+	/// Find a person in the family by name.
+	/// </summary>
+	/// <param name="name">Name of the Person to find.</param>
+	/// <returns>The first Person in the list with the specified name.</returns>
+	public Asset? GetAsset(string name)
+	{
+		return Assets.Find(x => x.Name == name);
+	}
 	
 	#endregion
 
@@ -73,12 +83,12 @@ public class Company
 	{
 		// Deserialize the object creating a new instance.  Then we set the path to the location the file was deserialized
 		// from.  That way the file can be saved back to that location if required.
-#if WINDOWS
-		T? company		= Serialization.DeserializeObject<T>(path);
-		return company;
-#else
-		return null;
-#endif
+		#if WINDOWS
+			T? company		= Serialization.DeserializeObject<T>(path);
+			return company;
+		#else
+			return null;
+		#endif
 	}
 
 	/// <summary>

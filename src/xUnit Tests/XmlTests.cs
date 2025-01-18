@@ -60,7 +60,6 @@ public class XmlTests
 	/// Test file 
 	/// </summary>
 	[Fact]
-
 	public void XmlRepeatedSerializationDeserialization()
 	{
 		string path = Path.Combine(Path.GetTempPath(), "testrepeated.xml");
@@ -88,13 +87,6 @@ public class XmlTests
 		string path = Path.Combine(Path.GetTempPath(), "test1.xml");
 
 		AirlineCompany company = AirlineCompany.CreateAirline();
-		//company.Employees.Add(new Person("", 20, Gender.Male));
-		//company.Employees.Add(new Person(" ", 20, Gender.Male));
-		//company.Employees.Add(new Person(null, 20, Gender.Male));
-		company.Assets.Add(new Asset("Asset 1", 1, "Some asset."));
-		company.Assets.Add(new Asset("", 2, ""));
-		company.Assets.Add(new Asset(" ", 3, " "));
-		company.Assets.Add(new Asset("", 4, ""));
 
 		Serialization.SerializeObjectFullEndElement(company, path);
 

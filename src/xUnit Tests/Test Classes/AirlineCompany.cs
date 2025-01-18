@@ -49,6 +49,12 @@ public class AirlineCompany : Company
 		company.Employees.Add(new Person("Luggage Handler", 37, Gender.Male));
 		company.Employees.Add(new Person("Pilot", 28, Gender.Female));
 		company.Employees.Add(new Person("Captain", 30, Gender.Male));
+
+		company.Assets.Add(new Asset("Embraer Phenom 300E", 10000000, "Long-range single-pilot jet, with a maximum range of 2,010 nautical miles. It seats six to 10 passengers."));
+		company.Assets.Add(new Asset("Cessna Citation CJ4 Gen2", 9000000, "Single-pilot plane that seats up to 10 passengers."));
+		company.Assets.Add(new Asset("HondaJet HA-420", 8000000, "One of the smallest and lightest jets around with enhanced efficiency."));
+		company.Assets.Add(new Asset("Cirrus Vision Jet", 7000000, " Includes a Cirrus Airframe Parachute System (CAPS)."));
+
 		return company;
 	}
 

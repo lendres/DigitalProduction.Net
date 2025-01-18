@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project>
 	<PropertyGroup>
+		<Title>Unit Tests for Digital Production Dot Net Library</Title>
+		<Product>DigitalProduction.Net Library Unit Tests</Product>
+		<Copyright>Lance A. Endres</Copyright>
 		<Company>Digital Production</Company>
+		<Description>Unit tests for the librry.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -9,7 +13,6 @@
 			<_Parameter1>Lance A. Endres</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-
 
 	<ItemGroup>
 		<AssemblyAttribute Include="DigitalProduction.Reflection.WebsiteAttribute">
