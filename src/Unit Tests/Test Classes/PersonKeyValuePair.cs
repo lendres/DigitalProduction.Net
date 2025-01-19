@@ -2,7 +2,7 @@
 using System.Xml;
 using DigitalProduction.UnitTests;
 
-namespace DigitalProduction.XML.Serialization;
+namespace DigitalProduction.Xml.Serialization;
 
 /// <summary>
 /// Person key value pair.

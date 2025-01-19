@@ -1,8 +1,8 @@
-﻿using GotDotNet.XInclude;
+﻿using DigitalProduction.Xml.XInclude;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-namespace DigitalProduction.XML;
+namespace DigitalProduction.Xml;
 
 /// <summary>
 /// 

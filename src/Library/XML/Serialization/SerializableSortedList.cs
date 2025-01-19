@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace DigitalProduction.XML.Serialization;
+namespace DigitalProduction.Xml.Serialization;
 
 /// <summary>
 /// Add serialization to a SortedList.

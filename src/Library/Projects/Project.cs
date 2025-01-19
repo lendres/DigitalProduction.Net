@@ -1,6 +1,6 @@
 ﻿using DigitalProduction.Delegates;
 using DigitalProduction.Interface;
-using DigitalProduction.XML.Serialization;
+using DigitalProduction.Xml.Serialization;
 using System;
 using System.Xml.Serialization;
 

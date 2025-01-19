@@ -22,7 +22,8 @@ public class HttpSearchTests
 	[Fact]
 	public void SearchTest1()
 	{
-		CustomSearchKey customSearchKey = CustomSearchKey.Deserialize(@"..\..\..\..\..\..\Keys\Google\customsearchkey.xml");
+		CustomSearchKey? customSearchKey = CustomSearchKey.Deserialize(@"..\..\..\..\..\..\Keys\Google\customsearchkey.xml");
+		Assert.NotNull(customSearchKey);
 		
 		CustomSearch.SetCxAndKey(customSearchKey);
 
@@ -41,7 +42,7 @@ public class HttpSearchTests
 		//Assert.AreEqual(Statistics.Covariance(xValues, yValues), 2.9167, 0.0001, errorMessage);
 	}
 
-	private string ResultString(Result result)
+	private static string ResultString(Result result)
 	{
 		string resultString = "";
 		resultString += "Title:        " + result.Title + Environment.NewLine;

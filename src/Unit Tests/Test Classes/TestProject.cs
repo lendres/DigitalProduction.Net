@@ -15,13 +15,13 @@ public class TestProject : DigitalProduction.Projects.Project
 	/// Attribute test.
 	/// </summary>
 	[XmlAttribute("attribute")]
-	public string Attribute {  get; set; } = string.Empty;
+	public string Attribute { get; set; } = string.Empty;
 
 	/// <summary>
 	/// Element test.
 	/// </summary>
 	[XmlAttribute("element")]
-	public string Element {  get; set; } = string.Empty;
+	public string Element { get; set; } = string.Empty;
 
 	/// <summary>
 	/// Writes a Project file (compressed file containing all the project's files).  Uses a ProjectCompressor to zip all files.  An

@@ -1,7 +1,7 @@
 using System.Text;
 using System.Xml;
 
-namespace DigitalProduction.XML.Serialization;
+namespace DigitalProduction.Xml.Serialization;
 
 /// <summary>
 /// Summary not provided for the class SerializationSettings.

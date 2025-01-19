@@ -1,4 +1,4 @@
-﻿namespace DigitalProduction.XML;
+﻿namespace DigitalProduction.Xml;
 
 /// <summary>
 /// Type of handler.

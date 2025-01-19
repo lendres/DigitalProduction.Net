@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<RootNamespace>xUnit_Tests</RootNamespace>
+		<RootNamespace>DigitalProduction.UnitTests</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
@@ -28,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Library\DigitalProductionDotNetLibrary.csproj" />
+		<ProjectReference Include="..\Library\DigitalProduction.Net.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

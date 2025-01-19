@@ -1,4 +1,4 @@
-﻿namespace DigitalProduction.XML.Serialization;
+﻿namespace DigitalProduction.Xml.Serialization;
 
 /// <summary>
 /// Interface for a key value pair.

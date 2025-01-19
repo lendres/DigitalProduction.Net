@@ -109,7 +109,7 @@ public static class ProjectFileTools
 		ProjectCompressor projectCompressor	= new(newProjectFileName);
 		string newFilePath					= projectCompressor.RegisterFile(fileToTransorm);
 
-		DigitalProduction.XML.XsltTools.Transform(fileToTransorm, projectUpdateData.XsltFile, newFilePath);
+		DigitalProduction.Xml.XsltTools.Transform(fileToTransorm, projectUpdateData.XsltFile, newFilePath);
 
 		// Copy all the remaining files to the compression directory.  We make a new copy of everything so that the ProjectExtractor
 		// and ProjectCompressor are not locking the same resources (directory, files).  An easy work around of the potential problem.
