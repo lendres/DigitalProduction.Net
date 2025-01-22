@@ -15,13 +15,7 @@ public static class Assembly
 	/// Note that this will NOT return the location of an executable that references this library.  To get that use
 	/// the System version or use the Location() function in this library and provide the executables assembly as input.
 	/// </remarks>
-	public static string LibraryLocation
-	{
-		get
-		{
-			return System.Reflection.Assembly.GetExecutingAssembly().Location;
-		}
-	}
+	public static string LibraryLocation { get => System.Reflection.Assembly.GetExecutingAssembly().Location; }
 
 	/// <summary>
 	/// Path of the library (does not include the name of the library).
@@ -30,13 +24,12 @@ public static class Assembly
 	/// If the library and any executable that calls it are installed in the same directory, this can be used
 	/// as a shortcut to get the path of the running executable.
 	/// </remarks>
-	public static string? LibraryPath
-	{
-		get
-		{
-			return System.IO.Path.GetDirectoryName(Assembly.LibraryLocation);
-		}
-	}
+	public static string? LibraryPath { get => System.IO.Path.GetDirectoryName(Assembly.LibraryLocation); }
+
+	/// <summary>
+	/// Path of the executable (does not include the name of the assembly).
+	/// </summary>
+	public static string? ExecutablePath { get => System.IO.Path.GetDirectoryName(IO.Path.RemoveDosDevicePaths(AppDomain.CurrentDomain.BaseDirectory)); }
 
 	#endregion
 
@@ -67,14 +60,6 @@ public static class Assembly
 	public static string Location(System.Reflection.Assembly assembly)
 	{
 		return DigitalProduction.IO.Path.RemoveDosDevicePaths(assembly.Location);
-	}
-
-	/// <summary>
-	/// Path of the executable (does not include the name of the assembly).
-	/// </summary>
-	public static string? ExecutablePath()
-	{
-		return System.IO.Path.GetDirectoryName(DigitalProduction.IO.Path.RemoveDosDevicePaths(AppDomain.CurrentDomain.BaseDirectory));
 	}
 
 	/// <summary>
@@ -334,7 +319,7 @@ public static class Assembly
 	/// </summary>
 	public static string DocumentationAddress()
 	{
-		return Website(System.Reflection.Assembly.GetCallingAssembly());
+		return DocumentationAddress(System.Reflection.Assembly.GetCallingAssembly());
 	}
 
 	/// <summary>

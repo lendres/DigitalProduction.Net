@@ -26,7 +26,13 @@ public class AssemblyTests
 	[Fact]
 	public void CompanyName()
 	{
-		string result = DigitalProduction.Reflection.Assembly.Company();
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string result	= DigitalProduction.Reflection.Assembly.Company(assembly);
+		Assert.Equal("Digital Production", result);
+
+		result			= DigitalProduction.Reflection.Assembly.Company();
 		Assert.Equal("Digital Production", result);
 	}
 
@@ -36,7 +42,13 @@ public class AssemblyTests
 	[Fact]
 	public void AuthorsName()
 	{
-		string result = DigitalProduction.Reflection.Assembly.Authors();
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string result	= DigitalProduction.Reflection.Assembly.Authors(assembly);
+		Assert.Equal("Lance A. Endres", result);
+
+		result			= DigitalProduction.Reflection.Assembly.Authors();
 		Assert.Equal("Lance A. Endres", result);
 	}
 
@@ -49,8 +61,10 @@ public class AssemblyTests
 		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
 		Assert.NotNull(assembly);
 
-		string result = DigitalProduction.Reflection.Assembly.Website(assembly);
+		string result	= DigitalProduction.Reflection.Assembly.Website(assembly);
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net", result);
 
+		result			= DigitalProduction.Reflection.Assembly.Website();
 		Assert.Equal("https://github.com/lendres/DigitalProduction.Net", result);
 	}
 
@@ -64,7 +78,9 @@ public class AssemblyTests
 		Assert.NotNull(assembly);
 
 		string result = DigitalProduction.Reflection.Assembly.IssuesAddress(assembly);
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/issues", result);
 
+		result		= DigitalProduction.Reflection.Assembly.IssuesAddress();
 		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/issues", result);
 	}
 
@@ -74,8 +90,13 @@ public class AssemblyTests
 	[Fact]
 	public void DocumentationAddress()
 	{
-		string result = DigitalProduction.Reflection.Assembly.DocumentationAddress();
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
 
+		string result = DigitalProduction.Reflection.Assembly.DocumentationAddress(assembly);
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/wiki", result);
+
+		result = DigitalProduction.Reflection.Assembly.DocumentationAddress();
 		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/wiki", result);
 	}
 
@@ -85,7 +106,13 @@ public class AssemblyTests
 	[Fact]
 	public void Version()
 	{
-		string result	= DigitalProduction.Reflection.Assembly.Version();
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string result	= DigitalProduction.Reflection.Assembly.Version(assembly);
+		Assert.Equal("1.1.3.0", result);
+
+		result			= DigitalProduction.Reflection.Assembly.Version();
 		Assert.Equal("1.1.3.0", result);
 
 		result			= DigitalProduction.Reflection.Assembly.Version(true);
@@ -102,7 +129,13 @@ public class AssemblyTests
 		// It will change depending on the location we run from.
 		// You don't seem to be able to edit the location or instantiate an assembly directly.
 		// Therefore, we will just run some basic checks.
-		string? result	= DigitalProduction.Reflection.Assembly.Path();
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string? result	= DigitalProduction.Reflection.Assembly.Path(assembly);
+		Assert.NotNull(result);
+
+		result	= DigitalProduction.Reflection.Assembly.Path();
 		Assert.NotNull(result);
 
 		foreach (string prefix in DigitalProduction.IO.Path.DosDevicePathPrefixes)
