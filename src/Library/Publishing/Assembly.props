@@ -5,7 +5,7 @@
 		<Product>DigitalProduction.Net</Product>
 		<Copyright>Lance A. Endres</Copyright>
 		<Company>Digital Production</Company>
-		<Description>A collection of C# classes, utilities, and algorithms.</Description>
+		<Description>A collection of classes, utilities, and algorithms for .Net.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
