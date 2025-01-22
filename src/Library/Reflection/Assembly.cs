@@ -43,12 +43,21 @@ public static class Assembly
 	#region Methods
 
 	/// <summary>
+	/// Find an assembly by its name.
+	/// </summary>
+	/// <param name="name">Name of the assembly to find.</param>
+	public static System.Reflection.Assembly? GetAssemblyByName(string name)
+	{
+		return AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == name);
+	}
+
+	/// <summary>
 	/// Location of the executing assembly (including the name of the assembly).
 	/// </summary>
 	/// <remarks>This is the same as System.Reflection.Assembly.GetExecutingAssembly().Location.</remarks>
 	public static string Location()
 	{
-		return System.Reflection.Assembly.GetCallingAssembly().Location;
+		return Location(System.Reflection.Assembly.GetCallingAssembly());
 	}
 
 	/// <summary>
@@ -57,15 +66,23 @@ public static class Assembly
 	/// <remarks>This is the same as System.Reflection.Assembly.GetExecutingAssembly().Location.</remarks>
 	public static string Location(System.Reflection.Assembly assembly)
 	{
-		return assembly.Location;
+		return DigitalProduction.IO.Path.RemoveDosDevicePaths(assembly.Location);
 	}
 
 	/// <summary>
-	/// Path of the executing assembly (does not include the name of the assembly).
+	/// Path of the executable (does not include the name of the assembly).
+	/// </summary>
+	public static string? ExecutablePath()
+	{
+		return System.IO.Path.GetDirectoryName(DigitalProduction.IO.Path.RemoveDosDevicePaths(AppDomain.CurrentDomain.BaseDirectory));
+	}
+
+	/// <summary>
+	/// Path of the calling assembly (does not include the name of the assembly).
 	/// </summary>
 	public static string? Path()
 	{
-		return System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+		return Path(System.Reflection.Assembly.GetCallingAssembly());
 	}
 
 	/// <summary>
@@ -106,7 +123,6 @@ public static class Assembly
 		}
 
 		// If there was no Title attribute, or if the Title attribute was the empty string, return the .exe name.
-		//assembly.CodeBase
 		return System.IO.Path.GetFileNameWithoutExtension(assembly.Location);
 	}
 
@@ -126,22 +142,22 @@ public static class Assembly
 		// Get all Authors attributes on this assembly.
 		object[] attributes = assembly.GetCustomAttributes(typeof(AuthorsAttribute), false);
 
-		// If there aren't any Authors attributes, return an empty string.
+		// If there aren't any attributes, return an empty string.
 		if (attributes.Length == 0)
 		{
 			return "";
 		}
 
-		// If there is a Description attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((AuthorsAttribute)attributes[0]).Authors;
 	}
 
 	/// <summary>
 	/// Get the calling assembly's version.
 	/// </summary>
-	public static string Version()
+	public static string Version(bool threeDigit = false)
 	{
-		return Version(System.Reflection.Assembly.GetCallingAssembly());
+		return Version(System.Reflection.Assembly.GetCallingAssembly(), threeDigit);
 	}
 
 	/// <summary>
@@ -173,13 +189,13 @@ public static class Assembly
 		// Get all Description attributes on this assembly.
 		object[] attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyDescriptionAttribute), false);
 
-		// If there aren't any Description attributes, return an empty string.
+		// If there aren't any attributes, return an empty string.
 		if (attributes.Length == 0)
 		{
 			return "";
 		}
 
-		// If there is a Description attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((System.Reflection.AssemblyDescriptionAttribute)attributes[0]).Description;
 	}
 
@@ -199,13 +215,13 @@ public static class Assembly
 		// Get all Product attributes on this assembly.
 		object[] attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyProductAttribute), false);
 
-		// If there aren't any Product attributes, return an empty string.
+		// If there aren't any attributes, return an empty string.
 		if (attributes.Length == 0)
 		{
 			return "";
 		}
 
-		// If there is a Product attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((System.Reflection.AssemblyProductAttribute)attributes[0]).Product;
 	}
 
@@ -225,13 +241,13 @@ public static class Assembly
 		// Get all Copyright attributes on this assembly.
 		object[] attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyCopyrightAttribute), false);
 
-		// If there aren't any Copyright attributes, return an empty string.
+		// If there aren't any attributes, return an empty string.
 		if (attributes.Length == 0)
 		{
 			return "";
 		}
 
-		// If there is a Copyright attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((System.Reflection.AssemblyCopyrightAttribute)attributes[0]).Copyright;
 	}
 
@@ -251,13 +267,13 @@ public static class Assembly
 		// Get all Company attributes on this assembly.
 		object[] attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyCompanyAttribute), false);
 
-		// If there aren't any Company attributes, return an empty string.
+		// If there aren't any attributes, return an empty string.
 		if (attributes.Length == 0)
 		{
 			return "";
 		}
 
-		// If there is a Company attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((System.Reflection.AssemblyCompanyAttribute)attributes[0]).Company;
 	}
 
@@ -283,7 +299,7 @@ public static class Assembly
 			return "";
 		}
 
-		// If there is a Description attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((WebsiteAttribute)attributes[0]).Url;
 	}
 
@@ -309,7 +325,7 @@ public static class Assembly
 			return "";
 		}
 
-		// If there is a Description attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((IssuesAddressAttribute)attributes[0]).Url;
 	}
 
@@ -335,7 +351,7 @@ public static class Assembly
 			return "";
 		}
 
-		// If there is a Description attribute, return its value.
+		// If there is an attribute, return its value.
 		return ((DocumentationAddressAttribute)attributes[0]).Url;
 	}
 
