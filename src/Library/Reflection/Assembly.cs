@@ -8,14 +8,14 @@ public static class Assembly
 	#region Properties
 
 	/// <summary>
-	/// Location of the library assembly (including the name of the library).
+	/// Location of this library assembly (including the name of the library).
 	/// </summary>
 	/// <remarks>
-	/// This is the same as System.Reflection.Assembly.GetExecutingAssembly().Location called from within the library.
+	/// This is the same as System.Reflection.Assembly.GetExecutingAssembly().Location called from within this library.
 	/// Note that this will NOT return the location of an executable that references this library.  To get that use
 	/// the System version or use the Location() function in this library and provide the executables assembly as input.
 	/// </remarks>
-	public static string LibraryLocation { get => System.Reflection.Assembly.GetExecutingAssembly().Location; }
+	public static string LibraryLocation { get => IO.Path.RemoveDosDevicePaths(System.Reflection.Assembly.GetExecutingAssembly().Location); }
 
 	/// <summary>
 	/// Path of the library (does not include the name of the library).
