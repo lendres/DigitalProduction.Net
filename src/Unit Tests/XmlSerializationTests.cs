@@ -12,7 +12,6 @@ public class XmlSerializationTests
 	[Fact]
 	public void XmlSerialization1()
 	{
-
 		string path = Path.Combine(Path.GetTempPath(), "test1.xml");
 
 		Family family = Family.CreateFamily();
@@ -30,7 +29,7 @@ public class XmlSerializationTests
 		Assert.Equal(4, person.Age);
 
 		System.IO.File.Delete(path);
-}
+	}
 
 	/// <summary>
 	/// 
