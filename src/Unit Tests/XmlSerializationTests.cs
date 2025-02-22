@@ -2,7 +2,7 @@
 
 namespace DigitalProduction.UnitTests;
 
-public class XmlTests
+public class XmlSerializationTests
 {
 	#region XML Serialization
 
@@ -12,7 +12,6 @@ public class XmlTests
 	[Fact]
 	public void XmlSerialization1()
 	{
-
 		string path = Path.Combine(Path.GetTempPath(), "test1.xml");
 
 		Family family = Family.CreateFamily();
@@ -30,13 +29,12 @@ public class XmlTests
 		Assert.Equal(4, person.Age);
 
 		System.IO.File.Delete(path);
-}
+	}
 
 	/// <summary>
 	/// 
 	/// </summary>
 	[Fact]
-
 	public void XmlSerialization2()
 	{
 		string path = Path.Combine(Path.GetTempPath(), "test2.xml");

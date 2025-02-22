@@ -276,7 +276,7 @@ public class XmlTextProcessor
 					// Handle the text.
 					handlers.Process(HandlerType.Text, this, data);
 
-					// If the handler processed the next we have read into something else (like an element)
+					// If the handler processed the text we have read into something else (like an element)
 					// and we don't want to call read again or we will read over it.
 					if (_xmlReader.NodeType != XmlNodeType.Text)
 					{

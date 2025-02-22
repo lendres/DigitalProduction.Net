@@ -1,0 +1,17 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<data>
+	<row>
+		<Time>0.0</Time>
+		<Acceleration>9.81</Acceleration>
+		<Velocity>0.0</Velocity>
+		<Displacement>0.0</Displacement>
+		<Blank></Blank>
+	</row>
+	<row>
+		<Time>0.2</Time>
+		<Acceleration>9.81</Acceleration>
+		<Velocity>1.962</Velocity>
+		<Displacement>0.0981</Displacement>
+		<Blank></Blank>
+	</row>
+</data>
