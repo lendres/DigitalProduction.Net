@@ -1,6 +1,4 @@
 ﻿using DigitalProduction.Xml;
-using DigitalProduction.Xml.Serialization;
-using System;
 
 namespace DigitalProduction.UnitTests;
 
@@ -189,6 +187,8 @@ public class XmlProcessingTests
 	private void TextForHeadersHandler(XmlTextProcessor xmlProcessor, object? data)
 	{
 		List<string> elements = (List<string>)data!;
+		string elementContents = xmlProcessor!.GetElementString(string.Empty);
+		System.Diagnostics.Debug.WriteLine(elementContents);
 		elements.Add(_currentElementName);
 	}
 
