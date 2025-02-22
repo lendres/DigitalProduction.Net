@@ -2,7 +2,7 @@
 
 namespace DigitalProduction.UnitTests;
 
-public class XmlTests
+public class XmlSerializationTests
 {
 	#region XML Serialization
 
@@ -36,7 +36,6 @@ public class XmlTests
 	/// 
 	/// </summary>
 	[Fact]
-
 	public void XmlSerialization2()
 	{
 		string path = Path.Combine(Path.GetTempPath(), "test2.xml");
