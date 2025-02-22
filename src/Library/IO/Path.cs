@@ -43,7 +43,7 @@ public static partial class Path
 
 	#region Fields
 
-	private static readonly char[] _invalidPathChars = ['\"', '*', '/', ':', '<', '>', '?', '\\', '|'];
+	private static readonly char[]	_invalidPathChars = ['\"', '*', '/', ':', '<', '>', '?', '\\', '|'];
 
 	private static readonly string[] _deviceNames =
 	[
@@ -51,9 +51,30 @@ public static partial class Path
 		"COM8",     "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
 	];
 
+	private static readonly List<string[]> _dosDevicePathPrefixes = [[@"\\?\UNC\", @"\\"], [@"\\.\UNC\", @"\\"], [@"\\.\", @""]];
+
 	#endregion
 
-	#region Static functions
+	#region Properties
+
+	public static string[] DeviceNames { get => _deviceNames; }
+
+	public static List<string> DosDevicePathPrefixes
+	{
+		get
+		{
+			List<string> prefixes = [];
+			foreach (string[] substitution in _dosDevicePathPrefixes)
+			{
+				prefixes.Add(substitution[0]);
+			}
+			return prefixes;
+		}		
+	}
+
+	#endregion
+
+	#region Methods
 
 	#region Paths
 
@@ -69,6 +90,30 @@ public static partial class Path
 			path2 = path2.Remove(0, 1);
 		}
 		return System.IO.Path.Combine(path1, path2);
+	}
+
+	/// <summary>
+	/// Remove DOS device prefixes.  
+	/// </summary>
+	/// <param name="path"></param>
+	/// <remarks>
+	/// These don't appear often as they are used internally by the operating system.  But when they do appear, these seem to reak havoc
+	/// on paths.  It should be safe to just remove the prefixes, but it is not known if this is generally true.  "System.IO.Path.GetPathRoot"
+	/// is sometimes suggested to remove them, but that does not seem to work.
+	/// </remarks>
+	public static string RemoveDosDevicePaths(string path)
+	{
+		foreach (string[] substitution in _dosDevicePathPrefixes)
+		{
+			if (path.StartsWith(substitution[0]))
+			{
+				// Remove the prefix and prepend the new substituted value (if there is one).
+				path = substitution[1] + path[(substitution[0].Length) ..];
+				// Assume only one prefix per path, so if we found one, we can return.
+				break;
+			}
+		}
+		return path;
 	}
 
 	#endregion
@@ -184,10 +229,10 @@ public static partial class Path
 		{
 			try
 			{
-				string initdir = System.IO.Path.GetDirectoryName(path) ?? "";
-				if (Directory.Exists(initdir))
+				string initalDirectory = System.IO.Path.GetDirectoryName(path) ?? "";
+				if (Directory.Exists(initalDirectory))
 				{
-					return initdir;
+					return initalDirectory;
 				}
 			}
 			catch

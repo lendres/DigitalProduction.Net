@@ -11,18 +11,28 @@ public class AssemblyTests
 	#region Tests
 
 	/// <summary>
-	/// Covariance test.
+	/// Find assembly by name test.
+	/// </summary>
+	[Fact]
+	public void FindAssemblyByName()
+	{
+		System.Reflection.Assembly? assembly = DigitalProduction.Reflection.Assembly.GetAssemblyByName("DigitalProduction.Net");
+		Assert.NotNull(assembly);
+	}
+
+	/// <summary>
+	/// Company name test.
 	/// </summary>
 	[Fact]
 	public void CompanyName()
 	{
-		//System.Reflection.Assembly? callingAssembly = System.Reflection.Assembly.GetCallingAssembly();
 		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
-		//System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetEntryAssembly();
 		Assert.NotNull(assembly);
 
-		string result = DigitalProduction.Reflection.Assembly.Company(assembly);
+		string result	= DigitalProduction.Reflection.Assembly.Company(assembly);
+		Assert.Equal("Digital Production", result);
 
+		result			= DigitalProduction.Reflection.Assembly.Company();
 		Assert.Equal("Digital Production", result);
 	}
 
@@ -35,8 +45,10 @@ public class AssemblyTests
 		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
 		Assert.NotNull(assembly);
 
-		string result = DigitalProduction.Reflection.Assembly.Authors(assembly);
+		string result	= DigitalProduction.Reflection.Assembly.Authors(assembly);
+		Assert.Equal("Lance A. Endres", result);
 
+		result			= DigitalProduction.Reflection.Assembly.Authors();
 		Assert.Equal("Lance A. Endres", result);
 	}
 
@@ -49,9 +61,11 @@ public class AssemblyTests
 		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
 		Assert.NotNull(assembly);
 
-		string result = DigitalProduction.Reflection.Assembly.Website(assembly);
+		string result	= DigitalProduction.Reflection.Assembly.Website(assembly);
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net", result);
 
-		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library", result);
+		result			= DigitalProduction.Reflection.Assembly.Website();
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net", result);
 	}
 
 	/// <summary>
@@ -64,8 +78,10 @@ public class AssemblyTests
 		Assert.NotNull(assembly);
 
 		string result = DigitalProduction.Reflection.Assembly.IssuesAddress(assembly);
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/issues", result);
 
-		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library/issues", result);
+		result		= DigitalProduction.Reflection.Assembly.IssuesAddress();
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/issues", result);
 	}
 
 	/// <summary>
@@ -78,8 +94,10 @@ public class AssemblyTests
 		Assert.NotNull(assembly);
 
 		string result = DigitalProduction.Reflection.Assembly.DocumentationAddress(assembly);
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/wiki", result);
 
-		Assert.Equal("https://github.com/lendres/C-Sharp-Dot-Net-Library/wiki", result);
+		result = DigitalProduction.Reflection.Assembly.DocumentationAddress();
+		Assert.Equal("https://github.com/lendres/DigitalProduction.Net/wiki", result);
 	}
 
 	/// <summary>
@@ -94,9 +112,42 @@ public class AssemblyTests
 		string result	= DigitalProduction.Reflection.Assembly.Version(assembly);
 		Assert.Equal("1.1.3.0", result);
 
-		result			= DigitalProduction.Reflection.Assembly.Version(assembly, true);
+		result			= DigitalProduction.Reflection.Assembly.Version();
+		Assert.Equal("1.1.3.0", result);
+
+		result			= DigitalProduction.Reflection.Assembly.Version(true);
 		Assert.Equal("1.1.3", result);
-	}	
+	}
+
+	/// <summary>
+	/// Location test.
+	/// </summary>
+	[Fact]
+	public void Location()
+	{
+		// The location is difficult to test.
+		// It will change depending on the location we run from.
+		// You don't seem to be able to edit the location or instantiate an assembly directly.
+		// Therefore, we will just run some basic checks.
+		System.Reflection.Assembly? assembly = System.Reflection.Assembly.GetExecutingAssembly();
+		Assert.NotNull(assembly);
+
+		string? result	= DigitalProduction.Reflection.Assembly.Path(assembly);
+		Assert.NotNull(result);
+
+		result	= DigitalProduction.Reflection.Assembly.Path();
+		Assert.NotNull(result);
+
+		foreach (string prefix in DigitalProduction.IO.Path.DosDevicePathPrefixes)
+		{
+			Assert.False(result.StartsWith(prefix));
+		}
+
+		// The location of the assembly will change a lot, so we won't bother to test it, but we will print it to the output window.		
+		System.Diagnostics.Debug.WriteLine("");
+		System.Diagnostics.Debug.WriteLine(result);
+		System.Diagnostics.Debug.WriteLine("");
+	}
 
 	#endregion
 

@@ -96,6 +96,29 @@ public class PathTests
 		Assert.True(result == solution, errorMessage);
 	}
 
-	#endregion
+	/// <summary>
+	/// Test to remove DOS device paths.
+	/// </summary>
+	[Fact]
+	public void RemoveDosDevicePaths()
+	{
+		string path = @"\SERVER\Temp\file.txt";
+		string networkPathSolution = @"\" + path;
 
+		// A valid path should not be altered.
+		string result = Path.RemoveDosDevicePaths(networkPathSolution);
+		Assert.Equal(networkPathSolution, result);
+
+		result = Path.RemoveDosDevicePaths(@"\\?\UNC"+path);
+		Assert.Equal(networkPathSolution, result);
+
+		result = Path.RemoveDosDevicePaths(@"\\.\UNC"+path);
+		Assert.Equal(networkPathSolution, result);
+
+		// This one should not add anything as a prefix..
+		result = Path.RemoveDosDevicePaths(@"\\.\c:\Temp\file.txt");
+		Assert.Equal(@"c:\Temp\file.txt", result);
+	}
+
+	#endregion
 } // End class.

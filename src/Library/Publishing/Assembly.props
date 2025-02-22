@@ -5,7 +5,7 @@
 		<Product>DigitalProduction.Net</Product>
 		<Copyright>Lance A. Endres</Copyright>
 		<Company>Digital Production</Company>
-		<Description>A collection of C# classes, utilities, and algorithms.</Description>
+		<Description>A collection of classes, utilities, and algorithms for .Net.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -16,13 +16,19 @@
 
 	<ItemGroup>
 		<AssemblyAttribute Include="DigitalProduction.Reflection.WebsiteAttribute">
-			<_Parameter1>https://github.com/lendres/C-Sharp-Dot-Net-Library</_Parameter1>
+			<_Parameter1>https://github.com/lendres/DigitalProduction.Net</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 
 	<ItemGroup>
 		<AssemblyAttribute Include="DigitalProduction.Reflection.IssuesAddressAttribute">
-			<_Parameter1>https://github.com/lendres/C-Sharp-Dot-Net-Library/issues</_Parameter1>
+			<_Parameter1>https://github.com/lendres/DigitalProduction.Net/issues</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="DigitalProduction.Reflection.DocumentationAddressAttribute">
+			<_Parameter1>https://github.com/lendres/DigitalProduction.Net/wiki</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 </Project>
