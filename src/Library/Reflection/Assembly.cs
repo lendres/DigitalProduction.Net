@@ -152,8 +152,9 @@ public static class Assembly
 	{
 		string version = assembly.GetName().Version?.ToString() ?? "";
 		if (threeDigit)
-		{ 
-			version = version.Substring(0, 5);
+		{
+			string[] split = version.Split('.', StringSplitOptions.TrimEntries);
+			version = split[0] + '.' + split[1] + '.' + split[2];
 		}
 		return version;
 	}

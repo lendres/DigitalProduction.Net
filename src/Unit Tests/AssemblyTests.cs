@@ -110,13 +110,13 @@ public class AssemblyTests
 		Assert.NotNull(assembly);
 
 		string result	= DigitalProduction.Reflection.Assembly.Version(assembly);
-		Assert.Equal("1.1.3.0", result);
+		Assert.Equal("1.10.3.0", result);
 
 		result			= DigitalProduction.Reflection.Assembly.Version();
-		Assert.Equal("1.1.3.0", result);
+		Assert.Equal("1.10.3.0", result);
 
 		result			= DigitalProduction.Reflection.Assembly.Version(true);
-		Assert.Equal("1.1.3", result);
+		Assert.Equal("1.10.3", result);
 	}
 
 	/// <summary>
