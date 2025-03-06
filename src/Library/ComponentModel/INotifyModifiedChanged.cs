@@ -1,4 +1,4 @@
-﻿namespace DigitalProduction.Interface;
+﻿namespace DigitalProduction.ComponentModel;
 
 /// <summary>
 /// Interface for a class that can track when it has been modified or saved and raise an event when it gets modified.
@@ -9,7 +9,7 @@
 /// <summary>
 /// Event for when the object was modified.
 /// </summary>
-/// public event ModifiedEventHandler? OnModifiedChanged;
+/// public event ModifiedChangedEventHandler? ModifiedChanged;
 /// 
 /// <summary>
 /// Specifies if the project has been modified since last being saved/loaded.
@@ -19,37 +19,37 @@
 /// {
 /// 	get => _modified;
 /// 
-///		set
+///		private set
 ///		{
 /// 		if (_modified != value)
 /// 		{
 /// 			_modified = value;
-/// 			RaiseOnModifiedChangedEvent();
+/// 			RaiseModifiedChangedEvent();
 /// 		}
 /// 	}
 /// }
 /// 
 /// <summary>
-/// Access for manually firing event for external sources.
+/// Event firing.  This can also be used by objects contained by this object to fire event.
 /// </summary>
-/// private void RaiseOnModifiedChangedEvent() => OnModifiedChanged?.Invoke(_modified);
+/// private void RaiseModifiedChangedEvent() => ModifiedChanged?.Invoke(this, _modified);
 /// </summary>
 
 /// <summary>
 /// Event handler for when modified is changed.
 /// </summary>
-public delegate void ModifiedEventHandler(bool modified);
+public delegate void ModifiedChangedEventHandler(object sender, bool modified);
  
-public interface IModified
+public interface INotifyModifiedChanged
 {
 	/// <summary>
 	/// Event for when the object was modified.
 	/// </summary>
-	event ModifiedEventHandler? OnModifiedChanged;
+	event ModifiedChangedEventHandler? ModifiedChanged;
 
 	/// <summary>
 	/// Specifies if the project has been modified since last being saved/loaded.
 	/// </summary>
-	bool Modified { get; set; }
+	bool Modified { get; }
 
 } // End interface.

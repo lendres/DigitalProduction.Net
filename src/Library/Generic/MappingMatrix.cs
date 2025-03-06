@@ -372,7 +372,7 @@ public class MappingMatrix<TKey, TData>
 		// going to be very efficient.
 
 		// We are going to need the length of the existing data and number of data types in a few places, so get it once.
-		int lengthOfData		= this.NumberOfEntries;
+		int lengthOfData		= NumberOfEntries;
 
 		// Create a new data structure for our data.  Because all the data is now loaded, we can provide the List constructor
 		// with size information, which should help keep things a little more efficient.

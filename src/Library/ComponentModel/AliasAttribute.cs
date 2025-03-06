@@ -6,14 +6,6 @@
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true)]
 public class AliasAttribute : Attribute
 {
-	#region Fields
-
-	private string			_alias		= "";
-
-	#endregion
-
-	#region Construction
-
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
@@ -25,29 +17,12 @@ public class AliasAttribute : Attribute
 	/// </summary>
 	public AliasAttribute(string alias)
 	{
-		_alias = alias;
+		Alias = alias;
 	}
-
-	#endregion
-
-	#region Properties
 
 	/// <summary>
 	/// An alternate name for the class/structure.
 	/// </summary>
-	public string Alias
-	{
-		get
-		{
-			return _alias;
-		}
-
-		set
-		{
-			_alias = value;
-		}
-	}
-
-	#endregion
+	public string Alias { get; set; } = string.Empty;
 
 } // End class.

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace DigitalProduction.Interface;
+namespace DigitalProduction.ComponentModel;
 
 public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
 {

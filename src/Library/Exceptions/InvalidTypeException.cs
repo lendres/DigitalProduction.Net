@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace DigitalProduction.Exceptions;
 
 /// <summary>
-/// The exception that is thrown a field is <see langword="null"/> reference (<see langword="Nothing"/> in Visual Basic).
+/// The exception that is thrown an object is the wrong type or is <see langword="null"/> reference (<see langword="Nothing"/> in Visual Basic).
 /// </summary>
 [Serializable]
 [TypeForwardedFrom("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]

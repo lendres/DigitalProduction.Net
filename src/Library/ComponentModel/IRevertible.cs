@@ -6,8 +6,6 @@
 /// </summary>
 public interface IRevertible
 {
-	#region Functions.
-
 	/// <summary>
 	/// Beginning of the edit.  Current state should be saved.
 	/// </summary>
@@ -22,7 +20,5 @@ public interface IRevertible
 	/// Accept (commit) the changes made since the last BeginEdit.
 	/// </summary>
 	void AcceptChanges();
-
-	#endregion
 
 } // End interface.
