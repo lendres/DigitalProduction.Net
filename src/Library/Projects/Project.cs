@@ -9,7 +9,7 @@ namespace DigitalProduction.Projects;
 /// <summary>
 /// Base class for a Project.  Provides common functionality.
 /// </summary>
-public abstract class Project : INotifyModifiedChanged
+public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 {
 	#region Events
 
@@ -17,7 +17,7 @@ public abstract class Project : INotifyModifiedChanged
 	/// Occurs when data in the project is modified.  Used, for example, to enable/disable the Save button based on whether the project
 	/// has been modified and needs to be saved.
 	/// </summary>
-	public event ModifiedChangedEventHandler?				ModifiedChanged;
+	public event ModifiedChangedEventHandler?		ModifiedChanged;
 
 	/// <summary>
 	/// Occurs when the project is initialized.  This event occurs every time a project is created, regardless of how it is created.  For
@@ -167,7 +167,7 @@ public abstract class Project : INotifyModifiedChanged
 	{
 		get => _modified;
 
-		set
+		protected set
 		{
 			if (_modified != value)
 			{
@@ -195,8 +195,7 @@ public abstract class Project : INotifyModifiedChanged
 		// Two conditions are required to fire the event.
 		//
 		// 1. Only allow event triggering to occur after the project is fully initialized.  That way we are not setting
-		// controls and such during file reading.  That would cause a problem because the controls themselves could
-		// trigger events.
+		// controls and such during file reading.
 		//
 		// 2. Only run the event if we have event subscribers.
 		if (_initialized)
@@ -244,21 +243,12 @@ public abstract class Project : INotifyModifiedChanged
 	}
 
 	/// <summary>
-	/// Access for manually firing event for external sources.
-	/// </summary>
-	private void RaiseClosedEvent()
-	{
-		// Trigger event only if there are any subscribers.
-		Closed?.Invoke();
-	}
-
-	/// <summary>
 	/// Clean up.
 	/// </summary>
 	public virtual void Close()
 	{
 		_closed = true;
-		RaiseClosedEvent();
+		Closed?.Invoke();
 	}
 
 	#endregion

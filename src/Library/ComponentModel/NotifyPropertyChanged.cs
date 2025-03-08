@@ -3,16 +3,16 @@ using System.Runtime.CompilerServices;
 
 namespace DigitalProduction.ComponentModel;
 
-public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
+/// <summary>
+/// Implements the INotifyPropertyChanged interface to provide a reusable base class.
+/// </summary>
+public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 {
 	#region Fields
 
 	public event		PropertyChangedEventHandler?	PropertyChanged;
 	private readonly	Dictionary<string, object?>		_properties			= [];
 
-	#endregion
-
-	#region Construction
 	#endregion
 
 	#region Methods

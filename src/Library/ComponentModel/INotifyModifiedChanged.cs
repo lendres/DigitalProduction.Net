@@ -24,15 +24,10 @@
 /// 		if (_modified != value)
 /// 		{
 /// 			_modified = value;
-/// 			RaiseModifiedChangedEvent();
+/// 			ModifiedChanged?.Invoke(this, value);
 /// 		}
 /// 	}
 /// }
-/// 
-/// <summary>
-/// Event firing.  This can also be used by objects contained by this object to fire event.
-/// </summary>
-/// private void RaiseModifiedChangedEvent() => ModifiedChanged?.Invoke(this, _modified);
 /// </summary>
 
 /// <summary>
