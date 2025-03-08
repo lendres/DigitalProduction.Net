@@ -16,6 +16,7 @@
 		<Title>DigitalProduction.Net</Title>
 		<AssemblyName>$(MSBuildProjectName.Replace(" ", "_"))</AssemblyName>
 		<RootNamespace>DigitalProduction</RootNamespace>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	</PropertyGroup>
 
 	<Target Name="RunPostBuildEventAfterPack" AfterTargets="Pack" Condition="'$(Configuration)' == 'Release'">
