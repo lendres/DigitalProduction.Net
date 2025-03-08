@@ -27,7 +27,7 @@ public class TestProject : DigitalProduction.Projects.Project
 	/// Writes a Project file (compressed file containing all the project's files).  Uses a ProjectCompressor to zip all files.  An
 	/// event of RaiseOnSavingEvent fires allowing other files to be added to the project.
 	///
-	/// The this.Path must be set and represent a valid path or this method will throw an exception.
+	/// The Path must be set and represent a valid path or this method will throw an exception.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Thrown when the projects path is not set or not valid.</exception>
 	//public override void Serialize()

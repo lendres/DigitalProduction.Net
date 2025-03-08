@@ -5,25 +5,8 @@ namespace DigitalProduction.Algorithms;
 /// <summary>
 /// A collection of general purpose algorithms.
 /// </summary>
-public class Algorithms
+public static class Algorithms
 {
-	#region Fields
-
-	#endregion
-
-	#region Construction
-
-	/// <summary>
-	/// Default constructor.
-	/// </summary>
-	public Algorithms()
-	{
-	}
-
-	#endregion
-
-	#region Shuffling
-
 	/// <summary>
 	/// Randomize an array list.  Uses .Net framework "Random" object to generate random numbers.
 	/// Written May 2004.
@@ -54,7 +37,5 @@ public class Algorithms
 			}
 		}
 	}
-
-	#endregion
 
 } // End class.

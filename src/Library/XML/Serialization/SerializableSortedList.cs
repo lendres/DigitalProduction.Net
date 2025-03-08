@@ -75,7 +75,7 @@ public class SerializableSortedList<KeyType, ValueType> : SortedList<KeyType, Va
 		XmlSerializerNamespaces namespaces	= new();
 		namespaces.Add("", "");
 
-		foreach (KeyType key in this.Keys)
+		foreach (KeyType key in Keys)
 		{
 			ValueType value		= this[key];
 			SerializableKeyValuePair<KeyType, ValueType> keyvaluepair = new()

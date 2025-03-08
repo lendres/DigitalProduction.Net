@@ -17,22 +17,11 @@ public static class Precision
 	/// <summary>
 	/// The allowed threshold that are numbers are allowed to be different, but still considered equal.
 	/// </summary>
-	public static double Epsilon
-	{
-		get
-		{
-			return Precision._epsilon;
-		}
-
-		set
-		{
-			Precision._epsilon = value;
-		}
-	}
+	public static double Epsilon { get => _epsilon; set => _epsilon = value; }
 
 	#endregion
 
-	#region Methods
+	#region Zero Comparisons
 
 	/// <summary>
 	/// Determines if the input is zero within the allotted precision.
@@ -61,6 +50,48 @@ public static class Precision
 	}
 
 	/// <summary>
+	/// Determines if the input is less than zero within the allotted precision.
+	/// </summary>
+	/// <param name="val">The value to check.</param>
+	public static bool LessThanZero(double val)
+	{
+		return LessThanZero(val, _epsilon);
+	}
+
+	/// <summary>
+	/// Determines if the input is less than zero within the allotted precision.
+	/// </summary>
+	/// <param name="val">The value to check.</param>
+	/// <param name="epsilon">The specified precision.</param>
+	public static bool LessThanZero(double val, double epsilon)
+	{
+		return val < -epsilon;
+	}
+
+	/// <summary>
+	/// Determines if the input is greater than zero within the allotted precision.
+	/// </summary>
+	/// <param name="val">The value to check.</param>
+	public static bool GreaterThanZero(double val)
+	{
+		return GreaterThanZero(val, _epsilon);
+	}
+
+	/// <summary>
+	/// Determines if the input is greater than zero within the allotted precision.
+	/// </summary>
+	/// <param name="val">The value to check.</param>
+	/// <param name="epsilon">The specified precision.</param>
+	public static bool GreaterThanZero(double val, double epsilon)
+	{
+		return val > epsilon;
+	}
+
+	#endregion
+
+	#region Greater Than / Less Than
+
+	/// <summary>
 	/// Determines if the first input is greater than the second input within the allotted precision.
 	/// </summary>
 	/// <param name="value1">The first value.</param>
@@ -79,25 +110,6 @@ public static class Precision
 	public static bool LessThan(double value1, double value2, double epsilon)
 	{
 		return LessThanZero(value1 - value2, epsilon);
-	}
-
-	/// <summary>
-	/// Determines if the input is less than zero within the allotted precision.
-	/// </summary>
-	/// <param name="val">The value to check.</param>
-	public static bool LessThanZero(double val)
-	{
-		return LessThanZero(val, _epsilon);
-	}
-
-	/// <summary>
-	/// Determines if the input is less than zero within the allotted precision.
-	/// </summary>
-	/// <param name="val">The value to check.</param>
-	/// <param name="epsilon">The specified precision.</param>
-	public static bool LessThanZero(double val, double epsilon)
-	{
-		return val < -epsilon;
 	}
 
 	/// <summary>
@@ -121,24 +133,7 @@ public static class Precision
 		return GreaterThanZero(value1 - value2, epsilon);
 	}
 
-	/// <summary>
-	/// Determines if the input is greater than zero within the allotted precision.
-	/// </summary>
-	/// <param name="val">The value to check.</param>
-	public static bool GreaterThanZero(double val)
-	{
-		return GreaterThanZero(val, _epsilon);
-	}
-
-	/// <summary>
-	/// Determines if the input is greater than zero within the allotted precision.
-	/// </summary>
-	/// <param name="val">The value to check.</param>
-	/// <param name="epsilon">The specified precision.</param>
-	public static bool GreaterThanZero(double val, double epsilon)
-	{
-		return val > epsilon;
-	}
+	#endregion
 
 	#region Equal and Not Equal
 
@@ -222,8 +217,6 @@ public static class Precision
 			return val;
 		}
 	}
-
-	#endregion
 
 	#endregion
 

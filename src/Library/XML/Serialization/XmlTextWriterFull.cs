@@ -32,11 +32,11 @@ public class XmlTextWriterFullEndElement : XmlTextWriter
 	{
 		if (settings.Indent)
 		{
-			this.Formatting = Formatting.Indented;
+			Formatting = Formatting.Indented;
 		}
 		else
 		{
-			this.Formatting = Formatting.None;
+			Formatting = Formatting.None;
 		}
 	}
 

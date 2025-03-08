@@ -1,5 +1,5 @@
 ﻿using DigitalProduction.Delegates;
-using DigitalProduction.Interface;
+using DigitalProduction.ComponentModel;
 using DigitalProduction.Xml.Serialization;
 using System;
 using System.Xml.Serialization;
@@ -9,7 +9,7 @@ namespace DigitalProduction.Projects;
 /// <summary>
 /// Base class for a Project.  Provides common functionality.
 /// </summary>
-public abstract class Project : IModified
+public abstract class Project : INotifyModifiedChanged
 {
 	#region Events
 
@@ -17,32 +17,32 @@ public abstract class Project : IModified
 	/// Occurs when data in the project is modified.  Used, for example, to enable/disable the Save button based on whether the project
 	/// has been modified and needs to be saved.
 	/// </summary>
-	public event ModifiedEventHandler?				OnModifiedChanged;
+	public event ModifiedChangedEventHandler?				ModifiedChanged;
 
 	/// <summary>
 	/// Occurs when the project is initialized.  This event occurs every time a project is created, regardless of how it is created.  For
 	/// example, this event will fire if the project is created by instantiating a new instance of a project (new Project) or if the Project
 	/// is created by deserializing from disk.
 	/// </summary>
-	public event NoArgumentsEventHandler?			OnInitialized;
+	public event Action?							Initialized;
 
 	/// <summary>
 	/// Occurs after a Project has been deserialized from disk.  Note that this event does not fire when creating a new instance of a
 	/// Project (new Project()).  Hook into this event to perform any operations or GUI setup required to be performed after opening
 	/// a Project from disk.
 	/// </summary>
-	public event ProjectOpenedEventHandler?			OnOpened;
+	public event ProjectOpenedEventHandler?			Opened;
 
 	/// <summary>
 	/// Occurs before a Project is serialized to disk.  Hook into this event to save related file for the project or any other events
 	/// that must occur before a project can be serialized.
 	/// </summary>
-	public event ProjectSavingEventHandler?			OnSaving;
+	public event ProjectSavingEventHandler?			Saving;
 
 	/// <summary>
 	/// Occurs after a Project has been closed.
 	/// </summary>
-	public event NoArgumentsEventHandler?			OnClosed;
+	public event Action?							Closed;
 
 	#endregion
 
@@ -96,7 +96,7 @@ public abstract class Project : IModified
 
 		set
 		{
-			//string thisVersion	= DigitalProduction.Strings.Format.MajorMinorVersionNumber(this.Version);
+			//string thisVersion	= DigitalProduction.Strings.Format.MajorMinorVersionNumber(Version);
 			//	string valueVersion = DigitalProduction.Strings.Format.MajorMinorVersionNumber(value);
 
 			//if (thisVersion != valueVersion)
@@ -122,13 +122,13 @@ public abstract class Project : IModified
 	/// Specifies is the project is currently savable.  Check before calling "Save()".  Calling "Save" with "Savable" false will throw an exception.
 	/// </summary>
 	[XmlIgnore()]
-	public bool Saveable { get => DigitalProduction.IO.Path.PathIsWritable(Path); }
+	public bool IsSaveable { get => DigitalProduction.IO.Path.PathIsWritable(Path); }
 
 	/// <summary>
 	/// Specifies that the project has finished initialization and should fire events from this point forward.
 	/// </summary>
 	[XmlIgnore()]
-	public bool Initialized
+	public bool IsInitialized
 	{
 		get => _initialized;
 
@@ -140,12 +140,12 @@ public abstract class Project : IModified
 
 				// Fire events.  Allows any hooks the GUI added to update and synch the GUI with the project.  The OnModifiedChanged event might not
 				// fire when the Modified property was set (if the value was the same) so we ensure it is fired below.
-				RaiseOnInitializedEvent();
-				RaiseOnModifiedChangedEvent();
+				RaiseInitializedEvent();
+				RaiseModifiedChangedEvent();
 
 				if (_creationMethod == CreationMethod.Deserialized)
 				{
-					RaiseOnOpenedEvent();
+					RaiseOpenedEvent();
 				}
 
 				// After we setup controls and such, the project may be reading that it was modified.  Since it is a brand new blank project,
@@ -153,7 +153,7 @@ public abstract class Project : IModified
 				if (_initialized == true)
 				{
 					// Initialized was not true, but now it is, so we reset the _modified value.
-					this.Modified = false;
+					Modified = false;
 				}
 			}
 		}
@@ -172,7 +172,7 @@ public abstract class Project : IModified
 			if (_modified != value)
 			{
 				_modified = value;
-				RaiseOnModifiedChangedEvent();
+				RaiseModifiedChangedEvent();
 			}
 		}
 	}
@@ -190,7 +190,7 @@ public abstract class Project : IModified
 	/// <summary>
 	/// Access for manually firing event for external sources.
 	/// </summary>
-	private void RaiseOnModifiedChangedEvent()
+	private void RaiseModifiedChangedEvent()
 	{
 		// Two conditions are required to fire the event.
 		//
@@ -199,9 +199,9 @@ public abstract class Project : IModified
 		// trigger events.
 		//
 		// 2. Only run the event if we have event subscribers.
-		if (_initialized && OnModifiedChanged != null)
+		if (_initialized)
 		{
-			OnModifiedChanged(_modified);
+			ModifiedChanged?.Invoke(this, _modified);
 		}
 	}
 
@@ -216,40 +216,40 @@ public abstract class Project : IModified
 	/// <summary>
 	/// Access for manually firing event for external sources.
 	/// </summary>
-	private void RaiseOnInitializedEvent()
+	private void RaiseInitializedEvent()
 	{
 		// Trigger event only if there are any subscribers.
-		this.OnInitialized?.Invoke();
+		Initialized?.Invoke();
 	}
 
 	/// <summary>
 	/// Access for manually firing event for external sources.
 	/// </summary>
-	private void RaiseOnOpenedEvent()
+	private void RaiseOpenedEvent()
 	{
 		// Trigger event only if there are any subscribers.
 		System.Diagnostics.Debug.Assert(_projectExtractor != null);
-		this.OnOpened?.Invoke(_projectExtractor);
+		Opened?.Invoke(_projectExtractor);
 	}
 
 	/// <summary>
 	/// Access for manually firing event for external sources.
 	/// </summary>
 	/// <param name="projectCompressor">ProjectCompressor used for saving the project.</param>
-	private void RaiseOnSavingEvent(ProjectCompressor projectCompressor)
+	private void RaiseSavingEvent(ProjectCompressor projectCompressor)
 	{
 		// Trigger event only if there are any subscribers.
 		System.Diagnostics.Debug.Assert(_projectExtractor != null);
-		this.OnSaving?.Invoke(projectCompressor);
+		Saving?.Invoke(projectCompressor);
 	}
 
 	/// <summary>
 	/// Access for manually firing event for external sources.
 	/// </summary>
-	private void RaiseOnClosedEvent()
+	private void RaiseClosedEvent()
 	{
 		// Trigger event only if there are any subscribers.
-		this.OnClosed?.Invoke();
+		Closed?.Invoke();
 	}
 
 	/// <summary>
@@ -258,7 +258,7 @@ public abstract class Project : IModified
 	public virtual void Close()
 	{
 		_closed = true;
-		RaiseOnClosedEvent();
+		RaiseClosedEvent();
 	}
 
 	#endregion
@@ -286,10 +286,10 @@ public abstract class Project : IModified
 	/// <param name="path">The file to read from.</param>
 	protected static T Deserialize<T>(string path) where T : Project
 	{
-		Project? project				= Serialization.DeserializeObject<T>(path);
+		Project? project			= Serialization.DeserializeObject<T>(path);
 		System.Diagnostics.Trace.Assert(project != null);
-		project._creationMethod			= CreationMethod.Deserialized;
-		project.Path					= path;
+		project._creationMethod		= CreationMethod.Deserialized;
+		project.Path				= path;
 
 		// When deserializing, the pointers to the parent (containing) instances are not established so we need to do that manually.
 		project.DeserializationInitialization();
@@ -301,14 +301,14 @@ public abstract class Project : IModified
 	/// Writes a Project file (compressed file containing all the project's files).  Uses a ProjectCompressor to zip all files.  An
 	/// event of RaiseOnSavingEvent fires allowing other files to be added to the project.
 	///
-	/// The this.Path must be set and represent a valid path or this method will throw an exception.
+	/// The Path must be set and represent a valid path or this method will throw an exception.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Thrown when the projects path is not set or not valid.</exception>
 	public virtual void Serialize()
 	{
 		SerializeWorker();
 
-		this.Modified = false;
+		Modified = false;
 	}
 
 	/// <summary>
@@ -316,7 +316,7 @@ public abstract class Project : IModified
 	/// </summary>
 	protected void SerializeWorker()
 	{
-		if (!this.Saveable)
+		if (!IsSaveable)
 		{
 			throw new InvalidOperationException("The Project cannot be currently saved.  A valid path must be specified.");
 		}
@@ -325,7 +325,7 @@ public abstract class Project : IModified
 		ProjectCompressor projectCompressor = new(Path);
 
 		// Have any subscribers add any files for compressing.
-		RaiseOnSavingEvent(projectCompressor);
+		RaiseSavingEvent(projectCompressor);
 
 		string projectFilePath = projectCompressor.RegisterFile(_projectFileName);
 		Serialization.SerializeObject(this, projectFilePath);

@@ -14,14 +14,14 @@ public class RevertibleList<T> : List<T> where T : IRevertible
 
 	#endregion
 
-	#region Begin/Reject/Accept changes.
+	#region Begin/Reject/Accept Changes
 
 	/// <summary>
 	/// Beginning of the edit.  Current state should be saved.
 	/// </summary>
 	public void BeginEdit()
 	{
-		int size = this.Count;
+		int size = Count;
 		for (int i = 0; i < size; i++)
 		{
 			this[i].BeginEdit();
@@ -33,7 +33,7 @@ public class RevertibleList<T> : List<T> where T : IRevertible
 	/// </summary>
 	public void RejectChanges()
 	{
-		int size = this.Count;
+		int size = Count;
 		for (int i = 0; i < size; i++)
 		{
 			this[i].RejectChanges();
@@ -45,7 +45,7 @@ public class RevertibleList<T> : List<T> where T : IRevertible
 	/// </summary>
 	public void AcceptChanges()
 	{
-		int size = this.Count;
+		int size = Count;
 		for (int i = 0; i < size; i++)
 		{
 			this[i].AcceptChanges();

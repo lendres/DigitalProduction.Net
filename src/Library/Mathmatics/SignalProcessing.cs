@@ -7,10 +7,6 @@ namespace DigitalProduction.Mathmatics;
 /// </summary>
 public static class SignalProcessing
 {
-	#region Fields
-
-	#endregion
-
 	#region Construction
 
 	/// <summary>
@@ -19,10 +15,6 @@ public static class SignalProcessing
 	static SignalProcessing()
 	{
 	}
-
-	#endregion
-
-	#region Properties
 
 	#endregion
 

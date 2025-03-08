@@ -34,7 +34,7 @@ public class SerializationSettings
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	public SerializationSettings(object objectToSerialize, string outputFile)
 	{
-		this.SerializeObject		= objectToSerialize;
+		SerializeObject		= objectToSerialize;
 		_outputFile					= outputFile;
 		CreateXmlWriterSettings();
 	}
@@ -45,10 +45,10 @@ public class SerializationSettings
 	/// </summary>
 	private void CreateXmlWriterSettings()
 	{
-		this.XmlSettings.Indent					= true;
-		this.XmlSettings.NewLineOnAttributes	= true;
-		this.XmlSettings.IndentChars			= "    ";
-		this.XmlSettings.Encoding				= Encoding.ASCII;
+		XmlSettings.Indent					= true;
+		XmlSettings.NewLineOnAttributes	= true;
+		XmlSettings.IndentChars			= "    ";
+		XmlSettings.Encoding				= Encoding.ASCII;
 	}
 
 	#endregion
