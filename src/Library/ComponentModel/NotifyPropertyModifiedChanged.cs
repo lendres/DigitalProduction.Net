@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace DigitalProduction.ComponentModel;
 
@@ -33,6 +35,26 @@ public abstract class NotifyPropertyModifiedChanged : NotifyPropertyChanged, INo
 				ModifiedChanged?.Invoke(this, value);
 			}
 		}
+	}
+
+	#endregion
+
+	#region Methods
+
+	protected override bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
+	{
+		if (base.SetValue(value, propertyName))
+		{
+			Modified = true;
+			return true;
+		}
+		return false;
+	}
+
+	protected override void OnPropertyChanged([CallerMemberName] string propertyName = null!)
+	{
+		base.OnPropertyChanged(propertyName);
+		Modified = true;
 	}
 
 	#endregion

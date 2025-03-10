@@ -17,7 +17,7 @@ public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 
 	#region Methods
 
-	protected bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
+	protected virtual bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
 	{
 		if (_properties.TryGetValue(propertyName!, out var item) && item == value)
 		{
