@@ -16,33 +16,44 @@ public class EventTests
 	#region Tests
 
 	/// <summary>
-	/// Test to convert a relative path to an absolute path.
+	/// Test the modified changed event.
 	/// </summary>
 	[Fact]
 	public void TestModifiedChanged()
 	{
+		// Setup.
 		Person person = new("Jon Doe", 50, Gender.Male);
 		Assert.False(person.Modified);
-
 		person.ModifiedChanged += OnModifiedChanged;
-		person.Age += 5;
+
+		// Test event fires and the object is now modified.
+		person.Name = "Jason Mamoa";
+		Assert.True(person.Modified);
+		Assert.Equal("modified", GetMessageAndReset());
+
+		// Test the reset/save.
+		person.Save();
+		Assert.False(person.Modified);
 		Assert.Equal("modified", GetMessageAndReset());
 	}
 
 	/// <summary>
-	/// Test to convert a relative path to an absolute path.
+	/// Test the property changed event.  Also tests different methods of triggering the property changed event.  The first
+	/// method is the "manual" implementation and the second is the automatic way.
 	/// </summary>
 	[Fact]
 	public void TestPropertyChanged()
 	{
 		Person person = new("Jon Doe", 50, Gender.Male);
 		person.PropertyChanged += OnPropertyChanged;
+		person.Age += 5;
+		Assert.Equal("Age", GetMessageAndReset());
 		person.Name = "Jason Mamoa";
 		Assert.Equal("Name", GetMessageAndReset());
 	}
 
 	/// <summary>
-	/// Test to convert a relative path to an absolute path.
+	/// Test both modified and property changed together.  Also tests the changing of an enum.
 	/// </summary>
 	[Fact]
 	public void TestBothChanged()
@@ -59,7 +70,6 @@ public class EventTests
 	private void OnModifiedChanged(object sender, bool modified)
 	{
 		Assert.Equal(typeof(Person), sender.GetType());
-		Assert.True(modified);
 		_message += "modified";
 	}
 

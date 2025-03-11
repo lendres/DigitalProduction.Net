@@ -5,6 +5,8 @@ namespace DigitalProduction.UnitTests;
 
 /// <summary>
 /// A person.
+/// 
+/// Uses 2 different methods for implementing events for property and modified changed and tests different data types.
 /// </summary>
 public class Person : NotifyPropertyModifiedChanged
 {
@@ -68,6 +70,16 @@ public class Person : NotifyPropertyModifiedChanged
 	/// </summary>
 	[XmlAttribute("gender")]
 	public Gender Gender { get => GetValueOrDefault<Gender>(Gender.Female); set => SetValue(value); }
+
+	#endregion
+
+	#region Methods
+
+	public void Save()
+	{
+		// Would normally save/serialize the class here.
+		Modified = false;
+	}
 
 	#endregion
 
