@@ -1,5 +1,4 @@
-﻿using DigitalProduction.Xml.Serialization;
-using DigitalProduction.Strings;
+﻿using DigitalProduction.Strings;
 
 namespace DigitalProduction.UnitTests;
 

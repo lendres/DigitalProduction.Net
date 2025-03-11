@@ -1,7 +1,5 @@
 ﻿using DigitalProduction.Http;
 using Google.Apis.CustomSearchAPI.v1.Data;
-using System;
-using System.Collections.Generic;
 
 namespace DigitalProduction.UnitTests;
 

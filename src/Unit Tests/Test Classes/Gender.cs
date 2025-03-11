@@ -13,10 +13,6 @@ public enum Gender
 
 	/// <summary>A man.</summary>
 	[Description("Man")]
-	Male,
-
-	/// <summary>The number of types/items in the enumeration.</summary>
-	[Description("Length")]
-	Length
+	Male
 
 } // End enum.
