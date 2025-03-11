@@ -1,12 +1,19 @@
-﻿using System.Xml.Serialization;
+﻿using DigitalProduction.ComponentModel;
+using System.Xml.Serialization;
 
 namespace DigitalProduction.UnitTests;
 
 /// <summary>
 /// A person.
 /// </summary>
-public class Person
+public class Person : NotifyPropertyModifiedChanged
 {
+	#region
+
+	int _age = 0;
+
+	#endregion
+
 	#region Construction
 
 	/// <summary>
@@ -21,9 +28,10 @@ public class Person
 	/// </summary>
 	public Person(string name, int age, Gender gender)
 	{
-		Name	= name;
-		Age		= age;
-		Gender	= gender;
+		Name		= name;
+		Age			= age;
+		Gender		= gender;
+		Modified	= false;
 	}
 
 	#endregion
@@ -34,19 +42,32 @@ public class Person
 	/// Name.
 	/// </summary>
 	[XmlAttribute("name")]
-	public string Name { get; set; } = "";
+	public string Name { get => GetValueOrDefault<string>(string.Empty); set => SetValue(value); }
 
 	/// <summary>
 	/// Age.
 	/// </summary>
 	[XmlAttribute("age")]
-	public int Age { get; set; } = 0;
+	public int Age
+	{
+		get => _age;
+
+		set
+		{
+			if (_age != value)
+			{
+				_age = value;
+				Modified = true;
+				OnPropertyChanged();
+			}
+		}
+	}
 
 	/// <summary>
 	/// Gender.
 	/// </summary>
 	[XmlAttribute("gender")]
-	public Gender Gender  { get; set; } = Gender.Female;
+	public Gender Gender { get => GetValueOrDefault<Gender>(Gender.Female); set => SetValue(value); }
 
 	#endregion
 
