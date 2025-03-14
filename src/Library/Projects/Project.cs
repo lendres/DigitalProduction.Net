@@ -42,7 +42,6 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 
 	// Handling opening/creation methods and events.
 	private CreationMethod							_creationMethod					= CreationMethod.Instantiated;
-//	private static CompressionType					_compressionType				= CompressionType.Compressed;
 	private ProjectExtractor?						_projectExtractor;
 
 	/// <summary>Project description.</summary>
@@ -65,13 +64,6 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// <summary>
 	/// Default constructor.
 	/// </summary>
-	protected Project()
-	{
-	}
-
-	/// <summary>
-	/// Default constructor.
-	/// </summary>
 	protected Project(CompressionType compressionType)
 	{
 		CompressionType = compressionType;
@@ -81,7 +73,11 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 
 	#region Properties
 
-	public static CompressionType CompressionType { get; private set; } = CompressionType.Compressed;
+	/// <summary>
+	/// Specifies how a project should be saved (with compression or without).
+	/// </summary>
+	[XmlIgnore()]
+	public CompressionType CompressionType { get; private set; } = CompressionType.Compressed;
 
 	/// <summary>
 	/// Software version.  We will use it as the file version as well.  Force the file and software versions to match or throw an exception.
@@ -209,7 +205,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// <summary>
 	/// Call back when the objects held by the projects are modified.
 	/// </summary>
-	protected void OnChildModifiedChanged()
+	protected void OnChildModifiedChanged(object sender, bool modified)
 	{
 		Modified = true;
 	}
@@ -265,7 +261,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 				throw new Exception("Invalid project compression type.");
 		}
 
-		Project.CompressionType		= compressionType;
+		project.CompressionType		= compressionType;
 		project.Path				= path;
 		return project;
 	}
@@ -276,7 +272,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// <param name="projectExtractor">ProjectExtractor used to unzip project files.</param>
 	private static T DeserializeCompressedFile<T>(string path) where T : Project
 	{
-		ProjectExtractor projectExtractor	= ProjectExtractor.ExtractFiles(path);
+		ProjectExtractor projectExtractor = ProjectExtractor.ExtractFiles(path);
 
 		Project project				= DeserializeProjectFile<T>(projectExtractor.GetFilePath(_projectFileName));
 		project._projectExtractor	= projectExtractor;
