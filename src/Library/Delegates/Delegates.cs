@@ -2,8 +2,6 @@
 
 namespace DigitalProduction.Delegates;
 
-#region Delegates
-
 /// <summary>
 /// General call back delegate.  Can be used to update the progress bar, close the form, et cetera via a call back function from another thread.
 /// </summary>
@@ -21,5 +19,3 @@ public delegate void NoArgumentsEventHandler();
 /// </summary>
 [Obsolete("OnErrorEventHandler is depricated, use Action<string> instead.")]
 public delegate void OnErrorEventHandler(string message);
-
-#endregion

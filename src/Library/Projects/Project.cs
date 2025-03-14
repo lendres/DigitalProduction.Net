@@ -1,7 +1,5 @@
-﻿using DigitalProduction.Delegates;
-using DigitalProduction.ComponentModel;
+﻿using DigitalProduction.ComponentModel;
 using DigitalProduction.Xml.Serialization;
-using System;
 using System.Xml.Serialization;
 
 namespace DigitalProduction.Projects;
@@ -31,13 +29,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// Project (new Project()).  Hook into this event to perform any operations or GUI setup required to be performed after opening
 	/// a Project from disk.
 	/// </summary>
-	public event ProjectOpenedEventHandler?			Opened;
-
-	/// <summary>
-	/// Occurs before a Project is serialized to disk.  Hook into this event to save related file for the project or any other events
-	/// that must occur before a project can be serialized.
-	/// </summary>
-	public event ProjectSavingEventHandler?			Saving;
+	public event Action?							Opened;
 
 	/// <summary>
 	/// Occurs after a Project has been closed.
@@ -50,6 +42,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 
 	// Handling opening/creation methods and events.
 	private CreationMethod							_creationMethod					= CreationMethod.Instantiated;
+//	private static CompressionType					_compressionType				= CompressionType.Compressed;
 	private ProjectExtractor?						_projectExtractor;
 
 	/// <summary>Project description.</summary>
@@ -62,7 +55,6 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	// have not been initialized.
 	private bool									_initialized					= false;
 	private bool									_modified						= false;
-	private bool									_closed							= false;
 
 	private const string							_projectFileName				= "Project.xml";
 
@@ -71,15 +63,25 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	#region Construction
 
 	/// <summary>
-	/// Default constructor for designer.
+	/// Default constructor.
 	/// </summary>
-	public Project()
+	protected Project()
 	{
+	}
+
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
+	protected Project(CompressionType compressionType)
+	{
+		CompressionType = compressionType;
 	}
 
 	#endregion
 
 	#region Properties
+
+	public static CompressionType CompressionType { get; private set; } = CompressionType.Compressed;
 
 	/// <summary>
 	/// Software version.  We will use it as the file version as well.  Force the file and software versions to match or throw an exception.
@@ -132,7 +134,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	{
 		get => _initialized;
 
-		set
+		protected set
 		{
 			if (_initialized != value)
 			{
@@ -181,7 +183,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// Specifies if the project has been closed.
 	/// </summary>
 	[XmlIgnore()]
-	public bool IsClosed { get => _closed; }
+	public bool IsClosed { get; private set; }
 
 	#endregion
 
@@ -207,7 +209,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// <summary>
 	/// Call back when the objects held by the projects are modified.
 	/// </summary>
-	protected void SetAsModified()
+	protected void OnChildModifiedChanged()
 	{
 		Modified = true;
 	}
@@ -228,18 +230,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	{
 		// Trigger event only if there are any subscribers.
 		System.Diagnostics.Debug.Assert(_projectExtractor != null);
-		Opened?.Invoke(_projectExtractor);
-	}
-
-	/// <summary>
-	/// Access for manually firing event for external sources.
-	/// </summary>
-	/// <param name="projectCompressor">ProjectCompressor used for saving the project.</param>
-	private void RaiseSavingEvent(ProjectCompressor projectCompressor)
-	{
-		// Trigger event only if there are any subscribers.
-		System.Diagnostics.Debug.Assert(_projectExtractor != null);
-		Saving?.Invoke(projectCompressor);
+		Opened?.Invoke();
 	}
 
 	/// <summary>
@@ -247,7 +238,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// </summary>
 	public virtual void Close()
 	{
-		_closed = true;
+		IsClosed = true;
 		Closed?.Invoke();
 	}
 
@@ -259,13 +250,36 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// Create an instance from a file.
 	/// </summary>
 	/// <param name="projectExtractor">ProjectExtractor used to unzip project files.</param>
-	protected static T Deserialize<T>(ProjectExtractor projectExtractor) where T : Project
+	public static T Deserialize<T>(string path, CompressionType compressionType) where T : Project
 	{
-		Project project				= Deserialize<T>(projectExtractor.GetFilePath(_projectFileName));
-		project._projectExtractor	= projectExtractor;
+		T project;
+		switch (compressionType)
+		{
+			case CompressionType.Compressed:
+				project = DeserializeCompressedFile<T>(path);
+				break;
+			case CompressionType.Uncompressed:
+				project = DeserializeProjectFile<T>(path);
+				break;
+			default:
+				throw new Exception("Invalid project compression type.");
+		}
 
-		// Project needs to remember where the main file was saved from, not the temporary file we used during the unzipping.
-		project.Path				= projectExtractor.Path;
+		Project.CompressionType		= compressionType;
+		project.Path				= path;
+		return project;
+	}
+
+	/// <summary>
+	/// Create an instance from a file.
+	/// </summary>
+	/// <param name="projectExtractor">ProjectExtractor used to unzip project files.</param>
+	private static T DeserializeCompressedFile<T>(string path) where T : Project
+	{
+		ProjectExtractor projectExtractor	= ProjectExtractor.ExtractFiles(path);
+
+		Project project				= DeserializeProjectFile<T>(projectExtractor.GetFilePath(_projectFileName));
+		project._projectExtractor	= projectExtractor;
 
 		return (T)project;
 	}
@@ -274,12 +288,11 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// Create an instance from a file.
 	/// </summary>
 	/// <param name="path">The file to read from.</param>
-	protected static T Deserialize<T>(string path) where T : Project
+	private static T DeserializeProjectFile<T>(string path) where T : Project
 	{
 		Project? project			= Serialization.DeserializeObject<T>(path);
 		System.Diagnostics.Trace.Assert(project != null);
 		project._creationMethod		= CreationMethod.Deserialized;
-		project.Path				= path;
 
 		// When deserializing, the pointers to the parent (containing) instances are not established so we need to do that manually.
 		project.DeserializationInitialization();
@@ -288,54 +301,65 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	}
 
 	/// <summary>
-	/// Writes a Project file (compressed file containing all the project's files).  Uses a ProjectCompressor to zip all files.  An
-	/// event of RaiseOnSavingEvent fires allowing other files to be added to the project.
-	///
-	/// The Path must be set and represent a valid path or this method will throw an exception.
+	/// Writes a Project file.
 	/// </summary>
-	/// <exception cref="InvalidOperationException">Thrown when the projects path is not set or not valid.</exception>
 	public virtual void Serialize()
-	{
-		SerializeWorker();
-
-		Modified = false;
-	}
-
-	/// <summary>
-	/// Main work of serialization and compressing project files.
-	/// </summary>
-	protected void SerializeWorker()
 	{
 		if (!IsSaveable)
 		{
 			throw new InvalidOperationException("The Project cannot be currently saved.  A valid path must be specified.");
 		}
-
-		// Create the ProjectCompressor.
-		ProjectCompressor projectCompressor = new(Path);
-
-		// Have any subscribers add any files for compressing.
-		RaiseSavingEvent(projectCompressor);
-
-		string projectFilePath = projectCompressor.RegisterFile(_projectFileName);
-		Serialization.SerializeObject(this, projectFilePath);
-
-		projectCompressor.CompressFiles();
+		SerializeWorker();
 	}
 
 	/// <summary>
-	/// Write this object to a file to the provided path.
+	/// Writes a Project file to the path specified.
 	/// </summary>
-	/// <param name="path">Path (full path and filename) to write to.</param>
-	/// <exception cref="InvalidOperationException">Thrown when the projects path is not set or not valid.</exception>
-	public void Serialize(string path)
+	public virtual void Serialize(string path)
 	{
-		if (!DigitalProduction.IO.Path.PathIsWritable(path))
+		Path = path;
+		SerializeWorker();
+	}
+
+	/// <summary>
+	/// Main work of serialization and/or compressing project files.
+	/// 
+	/// The Path must be set and represent a valid path or this method will throw an exception.
+	/// <exception cref="InvalidOperationException">Thrown when the projects path is not set or not valid.</exception>
+	/// </summary>
+	protected void SerializeWorker()
+	{
+		switch (CompressionType)
 		{
-			throw new InvalidOperationException("The Project cannot be currently saved.  A valid path must be specified.");
+			case CompressionType.Compressed:
+				// Create the ProjectCompressor.
+				ProjectCompressor projectCompressor = new(Path);
+
+				string projectFilePath = projectCompressor.RegisterFile(_projectFileName);
+				RegisterFilesForSaving(projectCompressor);
+
+				Serialization.SerializeObject(this, projectFilePath);
+
+				projectCompressor.CompressFiles();
+				break;
+
+			case CompressionType.Uncompressed:
+				Serialization.SerializeObject(this, Path);
+				break;
+
+			default:
+				throw new Exception("Invalid project compression type.");
 		}
 
-		Serialization.SerializeObject(this, path);
+		Modified = false;
+	}
+
+	/// <summary>
+	/// Adds additional file for projects that are compressed.  A derived class should override this to add any additional files.
+	/// </summary>
+	/// <param name="projectCompressor">ProjectCompressor.</param>
+	protected virtual void RegisterFilesForSaving(ProjectCompressor projectCompressor)
+	{
 	}
 
 	/// <summary>
@@ -344,7 +368,9 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// When desearializing, the pointers to other objects are not valid and events are not hooked up so we need to do that
 	/// manually.
 	/// </summary>
-	protected abstract void DeserializationInitialization();
+	protected virtual void DeserializationInitialization()
+	{
+	}
 
 	#endregion
 

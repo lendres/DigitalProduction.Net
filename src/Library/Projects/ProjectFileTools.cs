@@ -7,9 +7,6 @@ namespace DigitalProduction.Projects;
 /// </summary>
 public static class ProjectFileTools
 {
-	#region Fields
-	#endregion
-
 	#region Construction
 
 	/// <summary>
@@ -19,9 +16,6 @@ public static class ProjectFileTools
 	{
 	}
 
-	#endregion
-
-	#region Properties
 	#endregion
 
 	#region Methods

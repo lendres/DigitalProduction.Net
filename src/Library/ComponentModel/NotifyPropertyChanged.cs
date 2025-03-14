@@ -53,9 +53,27 @@ public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 		return default;
 	}
 
+	/// <summary>
+	/// Easy method for invoking the PropertyChanged event from a property.  If no argument is supplied, the property name
+	/// will automatically be used.
+	/// 
+	/// The PropertyChanged event can only be invoke from inside the class it is declared.
+	/// </summary>
+	/// <param name="propertyName">The of the property that changed.</param>
 	protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null!)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	/// <summary>
+	/// General method for invoking the PropertyChanged event from a property.  Can be relay changed event from class fields.
+	/// 
+	/// The PropertyChanged event can only be invoke from inside the class it is declared.
+	/// </summary>
+	/// <param name="propertyName">The of the property that changed.</param>
+	protected virtual void OnPropertyChanged(object? sender, PropertyChangedEventArgs eventArgs)
+	{
+		PropertyChanged?.Invoke(sender, eventArgs);
 	}
 
 	#endregion
