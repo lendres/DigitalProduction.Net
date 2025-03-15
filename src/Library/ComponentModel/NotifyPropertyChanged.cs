@@ -19,9 +19,23 @@ public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 
 	protected virtual bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
 	{
-		if (_properties.TryGetValue(propertyName!, out var item) && item == value)
+		bool foundProperty = _properties.TryGetValue(propertyName!, out var item);
+
+		if (foundProperty)
 		{
-			return false;
+			// Apparently, there are special cases where value == true and item == true, but value == item is false.
+			// Is seems like using "var item" is returning and instance and the "==" operator is saying this instance
+			// is not the other instance rather than checking that both are true.
+			if (value != null && value.Equals(item))
+			{
+				return false;
+			}
+
+			// If we get here, value is null.  So if item is also null, they are equal and we can return.
+			if (item == null)
+			{
+				return false;
+			}
 		}
 
 		_properties[propertyName!] = value;
