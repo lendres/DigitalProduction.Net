@@ -28,11 +28,12 @@ public class Person : NotifyPropertyModifiedChanged
 	/// <summary>
 	/// Constructor to populate fields.
 	/// </summary>
-	public Person(string name, int age, Gender gender)
+	public Person(string name, int age, Gender gender, bool employed = true)
 	{
 		Name		= name;
 		Age			= age;
 		Gender		= gender;
+		Employed    = employed;
 		Modified	= false;
 	}
 
@@ -70,6 +71,12 @@ public class Person : NotifyPropertyModifiedChanged
 	/// </summary>
 	[XmlAttribute("gender")]
 	public Gender Gender { get => GetValueOrDefault<Gender>(Gender.Female); set => SetValue(value); }
+
+	/// <summary>
+	/// Employed.
+	/// </summary>
+	[XmlAttribute("employed")]
+	public bool Employed { get => GetValueOrDefault<bool>(true); set => SetValue(value); }
 
 	#endregion
 

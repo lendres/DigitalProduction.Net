@@ -5,7 +5,7 @@ namespace DigitalProduction.UnitTests;
 /// <summary>
 /// Test cases the the Mathmatics namespace.
 /// </summary>
-public class EventTests
+public class NotifyPropertyModifiedTests
 {
 	#region Members
 
@@ -22,7 +22,7 @@ public class EventTests
 	public void TestModifiedChanged()
 	{
 		// Setup.
-		Person person = new("Jon Doe", 50, Gender.Male);
+		Person person = new("Jon Doe", 50, Gender.Male, true);
 		Assert.False(person.Modified);
 		person.ModifiedChanged += OnModifiedChanged;
 
@@ -35,6 +35,15 @@ public class EventTests
 		person.Save();
 		Assert.False(person.Modified);
 		Assert.Equal("modified", GetMessageAndReset());
+
+		// Test that setting the same value does not change Modified or fire the event.
+		person.Name = "Jason Mamoa";
+		Assert.False(person.Modified);
+		Assert.Equal("", GetMessageAndReset());
+
+		person.Employed = true;
+		Assert.False(person.Modified);
+		Assert.Equal("", GetMessageAndReset());
 	}
 
 	/// <summary>
