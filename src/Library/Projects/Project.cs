@@ -12,13 +12,6 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	#region Events
 
 	/// <summary>
-	/// Occurs when the project is initialized.  This event occurs every time a project is created, regardless of how it is created.  For
-	/// example, this event will fire if the project is created by instantiating a new instance of a project (new Project) or if the Project
-	/// is created by deserializing from disk.
-	/// </summary>
-	public event Action?							Initialized;
-
-	/// <summary>
 	/// Occurs after a Project has been deserialized from disk.  Note that this event does not fire when creating a new instance of a
 	/// Project (new Project()).  Hook into this event to perform any operations or GUI setup required to be performed after opening
 	/// a Project from disk.
@@ -36,17 +29,9 @@ public abstract class Project : NotifyPropertyModifiedChanged
 
 	// Handling opening/creation methods and events.
 	private CreationMethod							_creationMethod					= CreationMethod.Instantiated;
-	private ProjectExtractor?						_projectExtractor;
 
 	/// <summary>Project description.</summary>
 	protected string								_description					= "";
-
-	// State variables.
-
-	// XML serialization doesn't let us separate our XML reading from our Properties.  This variable is used to indicate when the Project
-	// has been fully constructed (either by the constructor or by XML reading being complete) to prevent function calls on variable that
-	// have not been initialized.
-	private bool									_initialized					= false;
 
 	private const string							_projectFileName				= "Project.xml";
 
@@ -116,40 +101,6 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	public bool IsSaveable { get => DigitalProduction.IO.Path.PathIsWritable(Path); }
 
 	/// <summary>
-	/// Specifies that the project has finished initialization and should fire events from this point forward.
-	/// </summary>
-	[XmlIgnore()]
-	public bool IsInitialized
-	{
-		get => _initialized;
-
-		protected set
-		{
-			if (_initialized != value)
-			{
-				_initialized = value;
-
-				if (_initialized == true)
-				{
-					// Fire events.  Allows any hooks the GUI added to update and synch the GUI with the project.  The OnModifiedChanged event might not
-					// fire when the Modified property was set (if the value was the same) so we ensure it is fired below.
-					RaiseInitializedEvent();
-
-					if (_creationMethod == CreationMethod.Deserialized)
-					{
-						RaiseOpenedEvent();
-					}
-
-					// After we setup controls and such, the project may be reading that it was modified.  Since it is a brand new blank project,
-					// we reset the modified value.
-					// Initialized was not true, but now it is, so we reset the _modified value.
-					Modified = false;
-				}
-			}
-		}
-	}
-
-	/// <summary>
 	/// Specifies if the project has been closed.
 	/// </summary>
 	[XmlIgnore()]
@@ -176,19 +127,8 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	/// <summary>
 	/// Access for manually firing event for external sources.
 	/// </summary>
-	private void RaiseInitializedEvent()
+	private void OnOpened()
 	{
-		// Trigger event only if there are any subscribers.
-		Initialized?.Invoke();
-	}
-
-	/// <summary>
-	/// Access for manually firing event for external sources.
-	/// </summary>
-	private void RaiseOpenedEvent()
-	{
-		// Trigger event only if there are any subscribers.
-		System.Diagnostics.Debug.Assert(_projectExtractor != null);
 		Opened?.Invoke();
 	}
 
@@ -237,8 +177,13 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	{
 		ProjectExtractor projectExtractor = ProjectExtractor.ExtractFiles(path);
 
-		Project project				= DeserializeProjectFile<T>(projectExtractor.GetFilePath(_projectFileName));
-		project._projectExtractor	= projectExtractor;
+		string projectPath          = projectExtractor.GetFilePath(_projectFileName);
+		Project project				= DeserializeProjectFile<T>(projectPath);
+		List<string> files          = projectExtractor.Files;
+
+		// Handle the non-project files.
+		files.Remove(projectPath);
+		project.HandleUncompressedFiles(files);
 
 		return (T)project;
 	}
@@ -252,9 +197,6 @@ public abstract class Project : NotifyPropertyModifiedChanged
 		Project? project			= Serialization.DeserializeObject<T>(path);
 		System.Diagnostics.Trace.Assert(project != null);
 		project._creationMethod		= CreationMethod.Deserialized;
-
-		// When deserializing, the pointers to the parent (containing) instances are not established so we need to do that manually.
-		project.DeserializationInitialization();
 
 		return (T)project;
 	}
@@ -317,17 +259,15 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	/// Adds additional file for projects that are compressed.  A derived class should override this to add any additional files.
 	/// </summary>
 	/// <param name="projectCompressor">ProjectCompressor.</param>
-	protected virtual void RegisterFilesForSaving(ProjectCompressor projectCompressor)
+	protected virtual void HandleUncompressedFiles(List<string> files)
 	{
 	}
 
 	/// <summary>
-	/// Initialize data structure after reading from XML file.
-	/// 
-	/// When desearializing, the pointers to other objects are not valid and events are not hooked up so we need to do that
-	/// manually.
+	/// Adds additional file for projects that are compressed.  A derived class should override this to add any additional files.
 	/// </summary>
-	protected virtual void DeserializationInitialization()
+	/// <param name="projectCompressor">ProjectCompressor.</param>
+	protected virtual void RegisterFilesForSaving(ProjectCompressor projectCompressor)
 	{
 	}
 
