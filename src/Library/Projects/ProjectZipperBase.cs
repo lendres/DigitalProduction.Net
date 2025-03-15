@@ -139,9 +139,25 @@ public abstract class ProjectZipperBase : IDisposable
 	public string Path { get; private set; } = string.Empty;
 
 	/// <summary>
-	/// Files in the archive.
+	/// Files (file name only) in the archive.
 	/// </summary>
 	public List<string> Files { get => _files; set => _files = value; }
+
+	/// <summary>
+	/// Files (complete paths) in the archive.
+	/// </summary>
+	public List<string> Paths
+	{
+		get
+		{
+			List<string> paths = [];
+			foreach (string path in _files)
+			{
+				paths.Add(System.IO.Path.Combine(_extractionDirectory, path));
+			}
+			return paths;
+		}
+	}
 
 	#endregion
 
