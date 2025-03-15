@@ -75,6 +75,7 @@ public class ProjectTests
 		project.Serialize(_file);
 		CleanUp();
 		Assert.False(project.Modified);
+		Assert.Equal("False", _message);
 
 		project.Person.Age += 5;
 		Assert.True(project.Modified);
