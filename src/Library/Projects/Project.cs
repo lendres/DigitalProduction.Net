@@ -7,15 +7,9 @@ namespace DigitalProduction.Projects;
 /// <summary>
 /// Base class for a Project.  Provides common functionality.
 /// </summary>
-public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
+public abstract class Project : NotifyPropertyModifiedChanged
 {
 	#region Events
-
-	/// <summary>
-	/// Occurs when data in the project is modified.  Used, for example, to enable/disable the Save button based on whether the project
-	/// has been modified and needs to be saved.
-	/// </summary>
-	public event ModifiedChangedEventHandler?		ModifiedChanged;
 
 	/// <summary>
 	/// Occurs when the project is initialized.  This event occurs every time a project is created, regardless of how it is created.  For
@@ -42,7 +36,6 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 
 	// Handling opening/creation methods and events.
 	private CreationMethod							_creationMethod					= CreationMethod.Instantiated;
-//	private static CompressionType					_compressionType				= CompressionType.Compressed;
 	private ProjectExtractor?						_projectExtractor;
 
 	/// <summary>Project description.</summary>
@@ -54,20 +47,12 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	// has been fully constructed (either by the constructor or by XML reading being complete) to prevent function calls on variable that
 	// have not been initialized.
 	private bool									_initialized					= false;
-	private bool									_modified						= false;
 
 	private const string							_projectFileName				= "Project.xml";
 
 	#endregion
 
 	#region Construction
-
-	/// <summary>
-	/// Default constructor.
-	/// </summary>
-	protected Project()
-	{
-	}
 
 	/// <summary>
 	/// Default constructor.
@@ -81,7 +66,11 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 
 	#region Properties
 
-	public static CompressionType CompressionType { get; private set; } = CompressionType.Compressed;
+	/// <summary>
+	/// Specifies how a project should be saved (with compression or without).
+	/// </summary>
+	[XmlIgnore()]
+	public CompressionType CompressionType { get; private set; } = CompressionType.Compressed;
 
 	/// <summary>
 	/// Software version.  We will use it as the file version as well.  Force the file and software versions to match or throw an exception.
@@ -140,41 +129,22 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 			{
 				_initialized = value;
 
-				// Fire events.  Allows any hooks the GUI added to update and synch the GUI with the project.  The OnModifiedChanged event might not
-				// fire when the Modified property was set (if the value was the same) so we ensure it is fired below.
-				RaiseInitializedEvent();
-				RaiseModifiedChangedEvent();
-
-				if (_creationMethod == CreationMethod.Deserialized)
-				{
-					RaiseOpenedEvent();
-				}
-
-				// After we setup controls and such, the project may be reading that it was modified.  Since it is a brand new blank project,
-				// we reset the modified value.
 				if (_initialized == true)
 				{
+					// Fire events.  Allows any hooks the GUI added to update and synch the GUI with the project.  The OnModifiedChanged event might not
+					// fire when the Modified property was set (if the value was the same) so we ensure it is fired below.
+					RaiseInitializedEvent();
+
+					if (_creationMethod == CreationMethod.Deserialized)
+					{
+						RaiseOpenedEvent();
+					}
+
+					// After we setup controls and such, the project may be reading that it was modified.  Since it is a brand new blank project,
+					// we reset the modified value.
 					// Initialized was not true, but now it is, so we reset the _modified value.
 					Modified = false;
 				}
-			}
-		}
-	}
-
-	/// <summary>
-	/// Specifies if the project has been modified since last being saved/loaded.
-	/// </summary>
-	[XmlIgnore()]
-	public bool Modified
-	{
-		get => _modified;
-
-		protected set
-		{
-			if (_modified != value)
-			{
-				_modified = value;
-				RaiseModifiedChangedEvent();
 			}
 		}
 	}
@@ -190,28 +160,17 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	#region Methods
 
 	/// <summary>
-	/// Access for manually firing event for external sources.
-	/// </summary>
-	private void RaiseModifiedChangedEvent()
-	{
-		// Two conditions are required to fire the event.
-		//
-		// 1. Only allow event triggering to occur after the project is fully initialized.  That way we are not setting
-		// controls and such during file reading.
-		//
-		// 2. Only run the event if we have event subscribers.
-		if (_initialized)
-		{
-			ModifiedChanged?.Invoke(this, _modified);
-		}
-	}
-
-	/// <summary>
 	/// Call back when the objects held by the projects are modified.
 	/// </summary>
-	protected void OnChildModifiedChanged()
+	protected void OnChildModifiedChanged(object sender, bool modified)
 	{
-		Modified = true;
+		// If a child changed from unmodified to modified, then we need to set ourself as modified.
+		// Modified == true propigates from children to parent.
+		// Modified == false can only propigate from parent to child through saving.
+		if (modified)
+		{
+			Modified = true;
+		}
 	}
 
 	/// <summary>
@@ -265,7 +224,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 				throw new Exception("Invalid project compression type.");
 		}
 
-		Project.CompressionType		= compressionType;
+		project.CompressionType		= compressionType;
 		project.Path				= path;
 		return project;
 	}
@@ -276,7 +235,7 @@ public abstract class Project : NotifyPropertyChanged, INotifyModifiedChanged
 	/// <param name="projectExtractor">ProjectExtractor used to unzip project files.</param>
 	private static T DeserializeCompressedFile<T>(string path) where T : Project
 	{
-		ProjectExtractor projectExtractor	= ProjectExtractor.ExtractFiles(path);
+		ProjectExtractor projectExtractor = ProjectExtractor.ExtractFiles(path);
 
 		Project project				= DeserializeProjectFile<T>(projectExtractor.GetFilePath(_projectFileName));
 		project._projectExtractor	= projectExtractor;
