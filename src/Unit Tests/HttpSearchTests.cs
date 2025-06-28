@@ -1,6 +1,5 @@
 ﻿using DigitalProduction.Http;
 using Google.Apis.CustomSearchAPI.v1.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DigitalProduction.UnitTests;
 
@@ -68,19 +67,19 @@ public class HttpSearchTests
 	[Fact]
 	public void SiteSearchTest1()
 	{
-		string search1		= "Pilot Bit and Reamer Matching: Real-Time Downhole Data Differentiates Hybrid Drill Bit’s Suitability with Concentric Reamer in Deepwater, Gulf of Mexico Application";
+		string search1		= "Improving Casing Running Efficiency Through A Comprehensive Wellbore Quality Scorecard: A Datadriven Approach";
 		//string search2 = "Proven Well Stabilization Technology for Trouble-Free Drilling and Cost Savings in Pressurized Permeable Formations";
 		string searchTerms	= search1;
 		string website      = "onepetro.org";
 
 		IList<Result>? results = CustomSearch.SiteSearch(searchTerms, website, 0);
-		//Assert.NotNull(results);
+		Assert.NotNull(results);
 
-		//string resultString = "Search: " + searchTerms + Environment.NewLine + Environment.NewLine;
-		//foreach (Result result in results)
-		//{
-		//	resultString += ResultString(result) + Environment.NewLine + Environment.NewLine + Environment.NewLine;
-		//}
+		string resultString = "Search: " + searchTerms + Environment.NewLine + Environment.NewLine;
+		foreach (Result result in results)
+		{
+			resultString += ResultString(result) + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+		}
 	}
 
 	#endregion
