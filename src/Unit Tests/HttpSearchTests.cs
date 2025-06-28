@@ -68,20 +68,19 @@ public class HttpSearchTests
 	[Fact]
 	public void SiteSearchTest1()
 	{
-		string search1 = "Pilot Bit and Reamer Matching: Real-Time Downhole Data Differentiates Hybrid Drill Bit’s Suitability with Concentric Reamer in Deepwater, Gulf of Mexico Application";
+		string search1		= "Pilot Bit and Reamer Matching: Real-Time Downhole Data Differentiates Hybrid Drill Bit’s Suitability with Concentric Reamer in Deepwater, Gulf of Mexico Application";
 		//string search2 = "Proven Well Stabilization Technology for Trouble-Free Drilling and Cost Savings in Pressurized Permeable Formations";
-		string searchTerms = search1;
+		string searchTerms	= search1;
 		string website      = "onepetro.org";
 
-		IList<Result> results = CustomSearch.SiteSearch(searchTerms, website, 0);
+		IList<Result>? results = CustomSearch.SiteSearch(searchTerms, website, 0);
+		//Assert.NotNull(results);
 
-		string resultString = "Search: " + searchTerms + Environment.NewLine + Environment.NewLine;
-		foreach (Result result in results)
-		{
-			resultString += ResultString(result) + Environment.NewLine + Environment.NewLine + Environment.NewLine;
-		}
-
-		//Assert.AreEqual(Statistics.Covariance(xValues, yValues), 2.9167, 0.0001, errorMessage);
+		//string resultString = "Search: " + searchTerms + Environment.NewLine + Environment.NewLine;
+		//foreach (Result result in results)
+		//{
+		//	resultString += ResultString(result) + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+		//}
 	}
 
 	#endregion
