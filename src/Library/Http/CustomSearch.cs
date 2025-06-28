@@ -22,16 +22,12 @@ public static class CustomSearch
 
 	#endregion
 
-	#region Construction
-
-	#endregion
-
 	#region Properties
 
 	/// <summary>
 	/// The custom search engine identifier (cx).
 	/// </summary>
-	public static string Cx { get => _cx; set => _cx=value; }
+	public static string Cx { get => _cx; private set => _cx = value; }
 
 	/// <summary>
 	/// API Key.
@@ -39,7 +35,7 @@ public static class CustomSearch
 	public static string ApiKey
 	{
 		get => _apiKey;
-		set
+		private set
 		{
 			_apiKey = value;
 			CreateService();
