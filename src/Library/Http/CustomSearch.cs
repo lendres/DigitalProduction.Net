@@ -22,16 +22,12 @@ public static class CustomSearch
 
 	#endregion
 
-	#region Construction
-
-	#endregion
-
 	#region Properties
 
 	/// <summary>
 	/// The custom search engine identifier (cx).
 	/// </summary>
-	public static string Cx { get => _cx; set => _cx=value; }
+	public static string Cx { get => _cx; private set => _cx = value; }
 
 	/// <summary>
 	/// API Key.
@@ -39,7 +35,7 @@ public static class CustomSearch
 	public static string ApiKey
 	{
 		get => _apiKey;
-		set
+		private set
 		{
 			_apiKey = value;
 			CreateService();
@@ -130,10 +126,10 @@ public static class CustomSearch
 	/// <param name="start">List request start.</param>
 	public static CseResource.ListRequest NewListRequest(string query, int start = 0)
 	{
-		CseResource.ListRequest listRequest = CustomSearch.Service.Cse.List();
-		listRequest.Cx		= _cx;
-		listRequest.Q		= query;
-		listRequest.Start	= start;
+		CseResource.ListRequest listRequest	= CustomSearch.Service.Cse.List();
+		listRequest.Cx						= _cx;
+		listRequest.Q						= query;
+		listRequest.Start					= start;
 		return listRequest;
 	}
 
