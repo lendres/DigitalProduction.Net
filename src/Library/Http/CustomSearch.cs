@@ -126,10 +126,10 @@ public static class CustomSearch
 	/// <param name="start">List request start.</param>
 	public static CseResource.ListRequest NewListRequest(string query, int start = 0)
 	{
-		CseResource.ListRequest listRequest = CustomSearch.Service.Cse.List();
-		listRequest.Cx		= _cx;
-		listRequest.Q		= query;
-		listRequest.Start	= start;
+		CseResource.ListRequest listRequest	= CustomSearch.Service.Cse.List();
+		listRequest.Cx						= _cx;
+		listRequest.Q						= query;
+		listRequest.Start					= start;
 		return listRequest;
 	}
 
