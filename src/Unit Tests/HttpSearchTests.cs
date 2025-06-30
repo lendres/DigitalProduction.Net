@@ -1,5 +1,7 @@
 ﻿using DigitalProduction.Http;
 using Google.Apis.CustomSearchAPI.v1.Data;
+using Microsoft.Playwright;
+using static System.Net.WebRequestMethods;
 
 namespace DigitalProduction.UnitTests;
 
@@ -81,6 +83,86 @@ public class HttpSearchTests
 			resultString += ResultString(result) + Environment.NewLine + Environment.NewLine + Environment.NewLine;
 		}
 	}
+
+	/// <summary>
+	/// Covariance test.
+	/// </summary>
+	[Fact]
+	public async Task FileDownloadTest()
+	{
+
+		string downloadUrl;
+		downloadUrl = "https://onepetro.org/Citation/Download?resourceId=542925&resourceType=3&citationFormat=2";
+		//downloadUrl = "http://ipv4.download.thinkbroadband.com:8080/10MB.zip";
+		//downloadUrl = "http://212.183.159.230/5MB.zip";
+		//downloadUrl = "https://examplefile.com/file-download/19";
+
+		await HttpGet.FileDownloadFromDirectLink3(downloadUrl, "C:\temp\fildownload.txt");
+	}
+
+
+
+	/// <summary>
+	/// Covariance test.
+	/// </summary>
+	[Fact]
+	public async Task SaveLoginTest()
+	{
+		await SaveLoginStateAsync2();
+
+    }
+
+	public static async Task SaveLoginStateAsync()
+	{
+		using var playwright = await Playwright.CreateAsync();
+		await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
+
+		var context = await browser.NewContextAsync();
+		var page = await context.NewPageAsync();
+
+		Console.WriteLine("Log in manually in the browser window...");
+
+		await page.GotoAsync("https://onepetro.org");
+
+		// Give you time to login (manually or institutionally)
+		Console.WriteLine("Press ENTER once you're logged in.");
+		Console.ReadLine();
+
+		await context.StorageStateAsync(new BrowserContextStorageStateOptions
+		{
+			Path = "auth.json"
+		});
+
+		Console.WriteLine("Login state saved.");
+	}
+
+public static async Task SaveLoginStateAsync2()
+{
+    using var playwright = await Playwright.CreateAsync();
+    await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+    {
+        Headless = false,   // <-- Required for Cloudflare detection to treat this as human
+        SlowMo = 50         // (optional) slows interactions for better manual login
+    });
+
+    var context = await browser.NewContextAsync();
+    var page = await context.NewPageAsync();
+
+    Console.WriteLine("Navigate to OnePetro and complete all human checks and logins.");
+
+    await page.GotoAsync("https://onepetro.org");
+
+    Console.WriteLine("Press ENTER once Cloudflare and login are complete...");
+    Console.ReadLine();
+
+    await context.StorageStateAsync(new BrowserContextStorageStateOptions
+    {
+        Path = "auth.json"
+    });
+
+    Console.WriteLine("Saved authenticated session.");
+}
+
 
 	#endregion
 

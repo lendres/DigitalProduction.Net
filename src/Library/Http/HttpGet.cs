@@ -50,7 +50,7 @@ public class HttpGet
 		return links;
 	}
 
-    public static async Task DownloadWithPlaywrightAsync(string fileUrl, string destinationPath)
+    public static async Task FileDownload(string fileUrl, string destinationPath)
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -59,13 +59,110 @@ public class HttpGet
         });
 
         var page = await browser.NewPageAsync();
-        var download = await page.RunAndWaitForDownloadAsync(async () =>
+
+
+		// METHOD 1.
+		//var download = await page.RunAndWaitForDownloadAsync(async () =>
+		//{
+		//    await page.GotoAsync(fileUrl);
+		//});
+
+
+
+		// METHOD 2.
+		// Go to the download page.
+		await page.GotoAsync(fileUrl);
+		var downloadTask = page.WaitForDownloadAsync();
+
+		// Simulate a click if necessary (you may need to inspect the page to get the correct selector)
+        //await page.ClickAsync("a:has-text('Download')"); // <-- Change this to match your actual page
+
+		var download = await downloadTask;
+
+
+
+
+		// Save file.
+        await download.SaveAsAsync(destinationPath);
+    }
+
+    public static async Task FileDownloadFromDirectLink(string fileUrl, string destinationPath)
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            await page.GotoAsync(fileUrl);
+            Headless = true
         });
 
+
+
+        var context = await browser.NewContextAsync(new BrowserNewContextOptions
+        {
+            AcceptDownloads = true
+        });
+
+        var page = await context.NewPageAsync();
+
+        // Wait for the download to happen from a direct navigation
+        var download = await page.RunAndWaitForDownloadAsync(() =>
+            page.GotoAsync(fileUrl, new PageGotoOptions { WaitUntil = WaitUntilState.NetworkIdle })
+        );
+
+
+		// Save file.
         await download.SaveAsAsync(destinationPath);
-        Console.WriteLine("Downloaded file to: " + destinationPath);
+    }
+
+    public static async Task FileDownloadFromDirectLink2(string fileUrl, string destinationPath)
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = true
+        });
+
+        var context = await browser.NewContextAsync(new BrowserNewContextOptions
+        {
+            AcceptDownloads = true
+        });
+
+        var page = await context.NewPageAsync();
+
+        // Navigate to homepage first to let it solve Cloudflare (optional but safer)
+        await page.GotoAsync("https://onepetro.org");
+
+        // Now wait for download from your citation URL
+        var download = await page.RunAndWaitForDownloadAsync(() =>
+            page.GotoAsync(fileUrl, new PageGotoOptions { WaitUntil = WaitUntilState.NetworkIdle })
+        );
+
+        await download.SaveAsAsync(destinationPath);
+    }
+
+    public static async Task FileDownloadFromDirectLink3(string fileUrl, string destinationPath)
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+
+        var context = await browser.NewContextAsync();
+        var page = await context.NewPageAsync();
+
+        // Go to home page to satisfy Cloudflare or cookies
+        await page.GotoAsync("https://onepetro.org");
+
+        // Fetch the file using JS and get it as base64
+        string base64 = await page.EvaluateAsync<string>(@"
+            async function() {
+                const response = await fetch('" + fileUrl + @"');
+                if (!response.ok) throw new Error('HTTP error ' + response.status);
+                const buffer = await response.arrayBuffer();
+                return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+            }
+        ");
+
+        // Decode base64 and save to file
+        byte[] fileBytes = Convert.FromBase64String(base64);
+        await File.WriteAllBytesAsync(destinationPath, fileBytes);
     }
 
 	#endregion
