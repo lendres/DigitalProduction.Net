@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.Playwright;
 
 namespace DigitalProduction.Http;
 
@@ -48,6 +49,24 @@ public class HttpGet
 
 		return links;
 	}
+
+    public static async Task DownloadWithPlaywrightAsync(string fileUrl, string destinationPath)
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = true
+        });
+
+        var page = await browser.NewPageAsync();
+        var download = await page.RunAndWaitForDownloadAsync(async () =>
+        {
+            await page.GotoAsync(fileUrl);
+        });
+
+        await download.SaveAsAsync(destinationPath);
+        Console.WriteLine("Downloaded file to: " + destinationPath);
+    }
 
 	#endregion
 
