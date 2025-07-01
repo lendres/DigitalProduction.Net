@@ -91,14 +91,15 @@ public class HttpGet
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            Headless = true
+            Headless = false
         });
-
-
 
         var context = await browser.NewContextAsync(new BrowserNewContextOptions
         {
-            AcceptDownloads = true
+            AcceptDownloads = true,
+            UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+                        "(KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+            ViewportSize = new ViewportSize { Width = 1920, Height = 1080 }
         });
 
         var page = await context.NewPageAsync();
@@ -163,6 +164,57 @@ public class HttpGet
         // Decode base64 and save to file
         byte[] fileBytes = Convert.FromBase64String(base64);
         await File.WriteAllBytesAsync(destinationPath, fileBytes);
+    }
+
+
+    private static readonly string StatePath = Path.Combine(Directory.GetCurrentDirectory(), "auth-state.json");
+
+    public static async Task FileDownloadLogin(string fileUrl, string destinationPath)
+    {
+        using var playwright = await Playwright.CreateAsync();
+        var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false // Set to false for manual login if needed
+        });
+
+        BrowserNewContextOptions contextOptions = new()
+        {
+            AcceptDownloads = true,
+            UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+                        "(KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+            ViewportSize = new ViewportSize { Width = 1920, Height = 1080 }
+        };
+
+        // Load saved login state if available
+        if (File.Exists(StatePath))
+        {
+            contextOptions.StorageStatePath = StatePath;
+        }
+
+        var context = await browser.NewContextAsync(contextOptions);
+        var page = await context.NewPageAsync();
+
+        // If this is the first time, login manually and save state
+        if (!File.Exists(StatePath))
+        {
+            Console.WriteLine("Navigate to login page and authenticate manually...");
+            await page.GotoAsync("https://onepetro.org"); // ← Replace with actual login page
+            Console.WriteLine("Press Enter after completing login...");
+            await context.StorageStateAsync(new BrowserContextStorageStateOptions { Path = StatePath });
+            Console.WriteLine("Login state saved.");
+        }
+
+        // Now go to the download link and download the file
+        var downloadTask = page.RunAndWaitForDownloadAsync(async () =>
+        {
+            await page.GotoAsync(fileUrl);
+        });
+
+        var download = await downloadTask;
+        await download.SaveAsAsync(destinationPath);
+
+        Console.WriteLine($"File downloaded to: {destinationPath}");
+        await browser.CloseAsync();
     }
 
 	#endregion

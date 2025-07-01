@@ -97,7 +97,7 @@ public class HttpSearchTests
 		//downloadUrl = "http://212.183.159.230/5MB.zip";
 		//downloadUrl = "https://examplefile.com/file-download/19";
 
-		await HttpGet.FileDownloadFromDirectLink3(downloadUrl, "C:\temp\fildownload.txt");
+		await HttpGet.FileDownloadLogin(downloadUrl, "C:\temp\fildownload.txt");
 	}
 
 
