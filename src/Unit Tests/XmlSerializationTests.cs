@@ -157,4 +157,154 @@ public class XmlSerializationTests
 
 	#endregion
 
+	#region String Serialization
+
+    [Fact]
+    public void DeserializeObjectFromString_ValidPersonXml_ReturnsPerson()
+    {
+        // Arrange.
+        string xml = """
+            <person name="Alice" age="35" gender="Female" employed="true" />
+            """;
+
+        // Act.
+        Person? result = Serialization.DeserializeObjectFromString<Person>(xml);
+
+        // Assert.
+        Assert.NotNull(result);
+        Assert.Equal("Alice", result.Name);
+        Assert.Equal(35, result.Age);
+        Assert.Equal(Gender.Female, result.Gender);
+        Assert.True(result.Employed);
+    }
+
+    [Fact]
+    public void DeserializeObjectFromString_ValidPersonXmlWithFalseEmployment_ReturnsPerson()
+    {
+        // Arrange.
+        string xml = """
+            <person name="Bob" age="42" gender="Male" employed="false" />
+            """;
+
+        // Act.
+        Person? result = Serialization.DeserializeObjectFromString<Person>(xml);
+
+        // Assert.
+        Assert.NotNull(result);
+        Assert.Equal("Bob", result.Name);
+        Assert.Equal(42, result.Age);
+        Assert.Equal(Gender.Male, result.Gender);
+        Assert.False(result.Employed);
+    }
+
+    [Fact]
+    public void DeserializeObjectFromString_MissingOptionalAttributes_UsesDefaults()
+    {
+        // Arrange.
+        string xml = """
+            <person name="Carol" age="28" />
+            """;
+
+        // Act.
+        Person? result = Serialization.DeserializeObjectFromString<Person>(xml);
+
+        // Assert.
+        Assert.NotNull(result);
+        Assert.Equal("Carol", result.Name);
+        Assert.Equal(28, result.Age);
+        Assert.Equal(Gender.Female, result.Gender);
+        Assert.True(result.Employed);
+    }
+
+    [Fact]
+    public void DeserializeObjectFromString_NullXml_ThrowsArgumentException()
+    {
+        // Arrange.
+        string? xml = null;
+
+        // Act.
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => Serialization.DeserializeObjectFromString<Person>(xml!));
+
+        // Assert.
+        Assert.Equal("xml", exception.ParamName);
+    }
+
+    [Fact]
+    public void DeserializeObjectFromString_EmptyXml_ThrowsArgumentException()
+    {
+        // Arrange.
+        string xml = "";
+
+        // Act.
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => Serialization.DeserializeObjectFromString<Person>(xml));
+
+        // Assert.
+        Assert.Equal("xml", exception.ParamName);
+    }
+
+    [Fact]
+    public void DeserializeObjectFromString_InvalidAge_ThrowsInvalidOperationException()
+    {
+        // Arrange.
+        string xml = """
+            <person name="Alice" age="NotAnInteger" gender="Female" employed="true" />
+            """;
+
+        // Act and assert.
+        Assert.Throws<InvalidOperationException>(
+            () => Serialization.DeserializeObjectFromString<Person>(xml));
+    }
+
+    [Fact]
+    public void DeserializeObjectFromString_WrongRootElement_ThrowsInvalidOperationException()
+    {
+        // Arrange.
+        string xml = """
+            <Person name="Alice" age="35" gender="Female" employed="true" />
+            """;
+
+        // Act and assert.
+        Assert.Throws<InvalidOperationException>(
+            () => Serialization.DeserializeObjectFromString<Person>(xml));
+    }
+
+    [Fact]
+    public void SerializeObjectToString_ValidPerson_ReturnsExpectedXml()
+    {
+        // Arrange.
+        var person = new Person("Alice", 35, Gender.Female, true);
+
+        // Act.
+        string xml = Serialization.SerializeObjectToString(person);
+
+        // Assert.
+        Assert.Contains("<person", xml);
+        Assert.Contains(""""name="Alice"""", xml);
+        Assert.Contains(""""age="35"""", xml);
+        Assert.Contains(""""gender="Female"""", xml);
+        Assert.Contains(""""employed="true"""", xml);
+    }
+
+    [Fact]
+    public void SerializeObjectToString_ThenDeserializeObjectFromString_RoundTripPreservesValues()
+    {
+        // Arrange.
+        var original = new Person("Bob", 42, Gender.Male, false);
+
+        // Act.
+        string xml		= Serialization.SerializeObjectToString(original);
+        Person? result	= Serialization.DeserializeObjectFromString<Person>(xml);
+
+        // Assert.
+        Assert.NotNull(result);
+        Assert.Equal(original.Name, result.Name);
+        Assert.Equal(original.Age, result.Age);
+        Assert.Equal(original.Gender, result.Gender);
+        Assert.Equal(original.Employed, result.Employed);
+    }
+
+	#endregion
+
 } // End class.

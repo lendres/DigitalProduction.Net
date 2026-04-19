@@ -1,4 +1,5 @@
 using DigitalProduction.Xml.XInclude;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -9,7 +10,7 @@ namespace DigitalProduction.Xml.Serialization;
 /// </summary>
 public static class Serialization
 {
-	#region Serialize
+	#region File Serialize
 
 	/// <summary>
 	/// Serialize an object.
@@ -62,7 +63,7 @@ public static class Serialization
 
 	#endregion
 
-	#region Deserialize
+	#region File Deserialize
 
 	/// <summary>
 	/// Deserialize an object from a file.
@@ -79,6 +80,59 @@ public static class Serialization
 		return deserializedobject;
 	}
 
-	#endregion
+    #endregion
+
+    #region String Serialization
+
+    public static string SerializeObjectToString<T>(T obj)
+    {
+        if (obj == null)
+        {
+            throw new ArgumentNullException(nameof(obj));
+        }
+
+        var serializer = new XmlSerializer(typeof(T));
+
+        var settings = new System.Xml.XmlWriterSettings
+        {
+            Encoding = Encoding.UTF8,
+            Indent = true,
+            OmitXmlDeclaration = false
+        };
+
+        using (Utf8StringWriter stringWriter = new())
+        using (XmlWriter xmlWriter = System.Xml.XmlWriter.Create(stringWriter, settings))
+        {
+            serializer.Serialize(xmlWriter, obj);
+            return stringWriter.ToString();
+        }
+    }
+
+    // Ensures UTF-8 instead of UTF-16 in declaration
+    private class Utf8StringWriter : StringWriter
+    {
+        public override Encoding Encoding => Encoding.UTF8;
+    }
+
+    #endregion
+
+    #region String Deserialization
+
+    public static T? DeserializeObjectFromString<T>(string xml)
+    {
+        if (string.IsNullOrWhiteSpace(xml))
+        {
+            throw new ArgumentException("Input XML is null or empty.", nameof(xml));
+        }
+
+        XmlSerializer serializer = new(typeof(T));
+
+        using (var stringReader = new StringReader(xml))
+        {
+            return (T?)serializer.Deserialize(stringReader);
+        }
+    }
+
+    #endregion
 
 } // End class.

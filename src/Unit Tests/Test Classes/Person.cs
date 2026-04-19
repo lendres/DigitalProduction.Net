@@ -8,6 +8,7 @@ namespace DigitalProduction.UnitTests;
 /// 
 /// Uses 2 different methods for implementing events for property and modified changed and tests different data types.
 /// </summary>
+[XmlRoot("person")]
 public class Person : NotifyPropertyModifiedChanged
 {
 	#region
