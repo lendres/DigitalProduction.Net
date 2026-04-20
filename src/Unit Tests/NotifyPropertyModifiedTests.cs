@@ -15,6 +15,8 @@ public class NotifyPropertyModifiedTests
 
 	#region Tests
 
+	#region Modified Changed
+
 	/// <summary>
 	/// Test the modified changed event.
 	/// </summary>
@@ -46,6 +48,10 @@ public class NotifyPropertyModifiedTests
 		Assert.Equal("", GetMessageAndReset());
 	}
 
+	#endregion
+
+	#region Test Property Changed
+
 	/// <summary>
 	/// Test the property changed event.  Also tests different methods of triggering the property changed event.  The first
 	/// method is the "manual" implementation and the second is the automatic way.
@@ -62,6 +68,32 @@ public class NotifyPropertyModifiedTests
 	}
 
 	/// <summary>
+	/// Test turning off the property changed event.
+	/// </summary>
+	[Fact]
+	public void TestPropertyChangedDisabled()
+	{
+		Person person = new("Jon Doe", 50, Gender.Male);
+		person.PropertyChanged += OnPropertyChanged;
+
+		// Turn off events.
+		person.InvokeChangeEvents = false;
+		person.Age += 5;
+		Assert.Equal("Age", GetMessageAndReset());
+		person.Name = "Jason Mamoa";
+		Assert.Equal(string.Empty, GetMessageAndReset());
+
+		// Turn on events again.
+		person.InvokeChangeEvents |= true;
+		person.Age += 5;
+		Assert.Equal("Age", GetMessageAndReset());
+	}
+
+	#endregion
+
+	#region Test Both Modified and Property Changed
+
+	/// <summary>
 	/// Test both modified and property changed together.  Also tests the changing of an enum.
 	/// </summary>
 	[Fact]
@@ -75,6 +107,10 @@ public class NotifyPropertyModifiedTests
 		person.Gender = Gender.Female;
 		Assert.Equal(14, GetMessageAndReset().Length);
 	}
+
+	#endregion
+
+	#region Helpers
 
 	private void OnModifiedChanged(object sender, bool modified)
 	{
@@ -95,6 +131,8 @@ public class NotifyPropertyModifiedTests
 		_message = string.Empty;
 		return temp;
 	}
+
+	#endregion
 
 	#endregion
 
