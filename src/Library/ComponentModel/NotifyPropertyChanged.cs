@@ -15,6 +15,16 @@ public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 
 	#endregion
 
+	#region Properties
+
+	/// <summary>
+	/// Specifies whether the PropertyChanged event should be invoked when a property value is changed.
+	/// This can be used to temporarily disable change events when making multiple changes to a class.
+	/// </summary>
+	public bool InvokeChangeEvents { get; set; } = true;
+
+	#endregion
+
 	#region Methods
 
 	protected virtual bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
@@ -76,7 +86,10 @@ public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 	/// <param name="propertyName">The of the property that changed.</param>
 	protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null!)
 	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		if (InvokeChangeEvents)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 
 	/// <summary>
@@ -87,7 +100,10 @@ public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 	/// <param name="propertyName">The of the property that changed.</param>
 	protected virtual void OnPropertyChanged(object? sender, PropertyChangedEventArgs eventArgs)
 	{
-		PropertyChanged?.Invoke(sender, eventArgs);
+		if (InvokeChangeEvents)
+		{
+			PropertyChanged?.Invoke(sender, eventArgs);
+		}
 	}
 
 	#endregion
