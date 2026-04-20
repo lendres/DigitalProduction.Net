@@ -79,7 +79,7 @@ public class NotifyPropertyModifiedTests
 		// Turn off events.
 		person.InvokeChangeEvents = false;
 		person.Age += 5;
-		Assert.Equal("Age", GetMessageAndReset());
+		Assert.Equal(string.Empty, GetMessageAndReset());
 		person.Name = "Jason Mamoa";
 		Assert.Equal(string.Empty, GetMessageAndReset());
 
