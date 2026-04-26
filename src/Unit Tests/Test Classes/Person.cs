@@ -11,7 +11,7 @@ namespace DigitalProduction.UnitTests;
 [XmlRoot("person")]
 public class Person : NotifyPropertyModifiedChanged
 {
-	#region
+	#region Fields
 
 	int _age = 0;
 
