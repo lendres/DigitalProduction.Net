@@ -51,11 +51,5 @@ public abstract class NotifyPropertyModifiedChanged : NotifyPropertyChanged, INo
 		return false;
 	}
 
-	protected override void OnPropertyChanged([CallerMemberName] string propertyName = null!)
-	{
-		base.OnPropertyChanged(propertyName);
-		Modified = true;
-	}
-
 	#endregion
 }
