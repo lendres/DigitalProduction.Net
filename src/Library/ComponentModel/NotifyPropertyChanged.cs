@@ -6,12 +6,11 @@ namespace DigitalProduction.ComponentModel;
 /// <summary>
 /// Implements the INotifyPropertyChanged interface to provide a reusable base class.
 /// </summary>
-public abstract class NotifyPropertyChanged : INotifyPropertyChanged
+public abstract class NotifyPropertyChanged : GenericProperties, INotifyPropertyChanged
 {
 	#region Fields
 
-	public event		PropertyChangedEventHandler?	PropertyChanged;
-	private readonly	Dictionary<string, object?>		_properties			= [];
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	#endregion
 
@@ -27,54 +26,14 @@ public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 
 	#region Methods
 
-	protected virtual bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
+	protected override bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
 	{
-		bool foundProperty = _properties.TryGetValue(propertyName!, out var item);
-
-		if (foundProperty)
+		if (base.SetValue(value, propertyName))
 		{
-			// Apparently, there are special cases where value == true and item == true, but value == item is false.
-			// Is seems like using "var item" is returning and instance and the "==" operator is saying this instance
-			// is not the other instance rather than checking that both are true.
-			if (value != null && value.Equals(item))
-			{
-				return false;
-			}
-
-			// If we get here, value is null.  So if item is also null, they are equal and we can return.
-			if (item == null)
-			{
-				return false;
-			}
+			OnPropertyChanged(propertyName);
+			return true;
 		}
-
-		_properties[propertyName!] = value;
-		OnPropertyChanged(propertyName);
-
-		return true;
-	}
-
-	protected T GetValueOrDefault<T>(T defaultValue, [CallerMemberName] string propertyName = null!)
-	{
-		if (_properties.TryGetValue(propertyName!, out var value))
-		{
-			if (value != null)
-			{
-				return (T)value;
-			}
-		}
-
-		return defaultValue;
-	}
-
-	protected T? GetValue<T>([CallerMemberName] string propertyName = null!)
-	{
-		if (_properties.TryGetValue(propertyName!, out var value))
-		{
-			return (T?)value;
-		}
-
-		return default;
+		return false;
 	}
 
 	/// <summary>

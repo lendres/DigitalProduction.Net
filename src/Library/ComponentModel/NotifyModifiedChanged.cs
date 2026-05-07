@@ -1,8 +1,9 @@
-﻿using System.Xml.Serialization;
+﻿using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace DigitalProduction.ComponentModel;
 
-public abstract class NotifyModifiedChanged : INotifyModifiedChanged
+public abstract class NotifyModifiedChanged : GenericProperties, INotifyModifiedChanged
 {
 	#region Fields
 
@@ -34,6 +35,29 @@ public abstract class NotifyModifiedChanged : INotifyModifiedChanged
 				ModifiedChanged?.Invoke(this, value);
 			}
 		}
+	}
+
+	#endregion
+
+	#region Methods
+
+	/// <summary>
+	/// Marks the object as saved, which sets Modified to false.  Override this method to perform
+	/// any necessary actions to save the object, such as writing to disk.
+	/// </summary>
+	public virtual void Save()
+	{
+		Modified = false;
+	}
+
+	protected override bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
+	{
+		if (base.SetValue(value, propertyName))
+		{
+			Modified = true;
+			return true;
+		}
+		return false;
 	}
 
 	#endregion
