@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 namespace DigitalProduction.ComponentModel;
@@ -11,9 +10,8 @@ public abstract class NotifyPropertyModifiedChanged : NotifyPropertyChanged, INo
 {
 	#region Fields
 
-	public event ModifiedChangedEventHandler? ModifiedChanged;
-
-	private	bool _modified = false;
+	public event ModifiedChangedEventHandler?	ModifiedChanged;
+	private	bool								_modified			= false;
 
 	#endregion
 
@@ -40,6 +38,15 @@ public abstract class NotifyPropertyModifiedChanged : NotifyPropertyChanged, INo
 	#endregion
 
 	#region Methods
+
+	/// <summary>
+	/// Marks the object as saved, which sets Modified to false.  Override this method to perform
+	/// any necessary actions to save the object, such as writing to disk.
+	/// </summary>
+	public virtual void Save()
+	{
+		Modified = false;
+	}
 
 	protected override bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
 	{

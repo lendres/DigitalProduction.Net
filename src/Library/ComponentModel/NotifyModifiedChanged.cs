@@ -41,6 +41,15 @@ public abstract class NotifyModifiedChanged : GenericProperties, INotifyModified
 
 	#region Methods
 
+	/// <summary>
+	/// Marks the object as saved, which sets Modified to false.  Override this method to perform
+	/// any necessary actions to save the object, such as writing to disk.
+	/// </summary>
+	public virtual void Save()
+	{
+		Modified = false;
+	}
+
 	protected override bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
 	{
 		if (base.SetValue(value, propertyName))

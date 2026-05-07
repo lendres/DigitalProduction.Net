@@ -47,4 +47,9 @@ public interface INotifyModifiedChanged
 	/// </summary>
 	bool Modified { get; }
 
+	/// <summary>
+	/// Perform any necessary actions to save the object, such as writing to disk, and set Modified to false.
+	/// </summary>
+	void Save();
+
 } // End interface.
