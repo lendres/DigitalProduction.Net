@@ -81,14 +81,4 @@ public class Person : NotifyPropertyModifiedChanged
 
 	#endregion
 
-	#region Methods
-
-	public void Save()
-	{
-		// Would normally save/serialize the class here.
-		Modified = false;
-	}
-
-	#endregion
-
 } // End class.
