@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace DigitalProduction.ComponentModel;
 
@@ -32,16 +27,25 @@ public class GenericProperties
 		{
 			// Apparently, there are special cases where value == true and item == true, but value == item is false.
 			// Is seems like using "var item" is returning and instance and the "==" operator is saying this instance
-			// is not the other instance rather than checking that both are true.
-			if (value != null && value.Equals(item))
+			// is not the other instance rather than checking that both are true. Therefore, we need to use the Equals
+			// method to compare the values instead of the "==" operator.
+			//
+			// Since we needed an instance (i.e., value != null) to compare, if item is null, then we need a separate check
+			// for the case where they are both null.
+			if (value == null)
 			{
-				return false;
+				if (item == null)
+				{
+					return false;
+				}
 			}
-
-			// If we get here, value is null.  So if item is also null, they are equal and we can return.
-			if (item == null)
+			else
 			{
-				return false;
+				// Value is not null here, so we can use the Equals method to compare the values.
+				if (value.Equals(item))
+				{
+					return false;
+				}
 			}
 		}
 
