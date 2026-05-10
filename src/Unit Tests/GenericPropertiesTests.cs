@@ -1,4 +1,5 @@
 ﻿using DigitalProduction.ComponentModel;
+using static System.Net.WebRequestMethods;
 
 namespace DigitalProduction.UnitTests;
 
@@ -70,6 +71,34 @@ public class GenericPropertiesTests
 	}
 
 	[Fact]
+	public void TestInstances()
+	{
+		GenericPropertiesTestClass testObject = new();
+
+		testObject.Person = new Person { Name = "Original Value" };
+		testObject.Person.Save();
+
+		// Fist test accessing the property directly.
+		Assert.Equal("Original Value", testObject.Person.Name);
+		Assert.False(testObject.Person.Modified);
+
+		// Test changing the name.
+		testObject.Person.Name = "Updated Value";
+		Assert.Equal("Updated Value", testObject.Person.Name);
+		Assert.True(testObject.Person.Modified);
+
+		// Reset.
+		testObject.Person = new Person { Name = "Original Value" };
+		testObject.Person.Save();
+		Assert.False(testObject.Person.Modified);
+
+		// Test changing the name by using the test classes property.
+		testObject.PersonName = "Updated Value";
+		Assert.Equal("Updated Value", testObject.PersonName);
+		Assert.True(testObject.Person.Modified);
+	}
+
+	[Fact]
 	public void SetValueHandlesNullValues()
 	{
 		GenericPropertiesTestClass testObject = new();
@@ -98,6 +127,8 @@ public class GenericPropertiesTests
 		Assert.Equal("optional", testObject.OptionalName);
 	}
 
+	#region Test Class
+
 	private class GenericPropertiesTestClass : GenericProperties
 	{
 		public string Name
@@ -124,6 +155,24 @@ public class GenericPropertiesTests
 			set => SetValue(value);
 		}
 
+		public Person Person
+		{
+			get => GetValueOrDefault<Person>(new Person());
+			set => SetValue(value);
+		}
+
+		public string PersonName
+		{
+			get => Person.Name;
+			set
+			{
+				if (Person.Name != value)
+				{
+					Person.Name = value;
+				}
+			}
+		}
+
 		public bool SetName(string value)
 		{
 			return SetValue(value, nameof(Name));
@@ -139,4 +188,6 @@ public class GenericPropertiesTests
 			return SetValue(value, nameof(Activated));
 		}
 	}
+	
+	#endregion
 }
