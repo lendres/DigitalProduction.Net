@@ -20,9 +20,9 @@ public class ProjectTests
 		TestProjectUncompressed project = new();
 		
 		SetupProject(project);
-		Assert.False(project.IsSaveable);
+		Assert.False(project.HasSavePath);
 		project.Serialize(_file);
-		Assert.True(project.IsSaveable);
+		Assert.True(project.HasSavePath);
 		CleanUp();
 	}
 	

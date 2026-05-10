@@ -40,7 +40,7 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	#region Construction
 
 	/// <summary>
-	/// Default constructor.
+	/// Constructor.
 	/// </summary>
 	protected Project(CompressionType compressionType)
 	{
@@ -98,13 +98,13 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	/// Specifies is the project is currently savable.  Check before calling "Save()".  Calling "Save" with "Savable" false will throw an exception.
 	/// </summary>
 	[XmlIgnore()]
-	public bool IsSaveable { get => DigitalProduction.IO.Path.PathIsWritable(Path); }
+	public bool HasSavePath { get => DigitalProduction.IO.Path.PathIsWritable(Path); }
 
 	/// <summary>
 	/// Specifies if the project has been closed.
 	/// </summary>
 	[XmlIgnore()]
-	public bool IsClosed { get; private set; }
+	public bool IsOpen { get; protected set; }
 
 	#endregion
 
@@ -127,8 +127,9 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	/// <summary>
 	/// Access for manually firing event for external sources.
 	/// </summary>
-	private void OnOpened()
+	public virtual void Open()
 	{
+		IsOpen = true;
 		Opened?.Invoke();
 	}
 
@@ -137,7 +138,7 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	/// </summary>
 	public virtual void Close()
 	{
-		IsClosed = true;
+		IsOpen = false;
 		Closed?.Invoke();
 	}
 
@@ -206,7 +207,7 @@ public abstract class Project : NotifyPropertyModifiedChanged
 	/// </summary>
 	public virtual void Serialize()
 	{
-		if (!IsSaveable)
+		if (!HasSavePath)
 		{
 			throw new InvalidOperationException("The Project cannot be currently saved.  A valid path must be specified.");
 		}
