@@ -50,6 +50,13 @@ public abstract class NotifyModifiedChanged : GenericProperties, INotifyModified
 		Modified = false;
 	}
 
+	/// <summary>
+	/// Generic set property method that can be used by any property in the class.  The property name is automatically determined
+	/// by the CallerMemberName attribute, so this method can be called without specifying the property name.
+	/// </summary>
+	/// <param name="value">The value to set.</param>
+	/// <param name="propertyName">The name of the property. This is automatically provided by the CallerMemberName attribute.</param>
+	/// <returns>True if the value was changed, false otherwise.</returns>
 	protected override bool SetValue(object? value, [CallerMemberName] string propertyName = null!)
 	{
 		if (base.SetValue(value, propertyName))
