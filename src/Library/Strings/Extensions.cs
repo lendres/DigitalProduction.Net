@@ -1,4 +1,6 @@
-﻿public static class StringExtensions
+﻿namespace DigitalProduction.Strings;
+
+public static class Extensions
 {
 	/// <summary>
 	/// Checks if two strings are equal, ignoring differences in line endings (e.g., \r\n vs. \n).

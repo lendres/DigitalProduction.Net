@@ -1,4 +1,6 @@
-﻿namespace DigitalProduction.UnitTests;
+﻿using DigitalProduction.Strings;
+
+namespace DigitalProduction.UnitTests;
 
 public class StringExtensionsTests
 {
