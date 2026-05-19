@@ -34,6 +34,20 @@ public static class Format
 
 	#region Methods
 
+	/// <summary>
+	/// Removes substrings from the beginning of a string.
+	/// </summary>
+	/// <param name="target">Current string.</param>
+	/// <param name="trimStrings">The strings to remove from the current string.</param>
+	public static string TrimStart(string target, string[] trimStrings)
+	{
+		string result = target;
+		foreach (string trimString in trimStrings)
+		{
+			result = TrimStart(result, trimString);
+		}
+		return result;
+	}
 
 	/// <summary>
 	/// Removes a substring from the beginning of a string.
@@ -54,13 +68,31 @@ public static class Format
 	}
 
 	/// <summary>
+	/// Removes substrings from the end of a string.
+	/// </summary>
+	/// <param name="target">Current string.</param>
+	/// <param name="trimStrings">The strings to remove from the current string.</param>
+	public static string TrimEnd(string target, string[] trimStrings)
+	{
+		string result = target;
+		foreach (string trimString in trimStrings)
+		{
+			result = TrimEnd(result, trimString);
+		}
+		return result;
+	}
+
+	/// <summary>
 	/// Removes a substring from the end of a string.
 	/// </summary>
 	/// <param name="target">Current string.</param>
 	/// <param name="trimString">The string to remove from the current string.</param>
 	public static string TrimEnd(string target, string trimString)
 	{
-		if (string.IsNullOrEmpty(trimString)) return target;
+		if (string.IsNullOrEmpty(trimString))
+		{
+			return target;
+		}
 
 		string result = target;
 		while (result.EndsWith(trimString))
