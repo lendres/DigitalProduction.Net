@@ -1,4 +1,4 @@
-﻿using DigitalProduction.ComponentModel;
+﻿using DigitalProduction.Reflection;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using DigitalProduction.Xml.Serialization;

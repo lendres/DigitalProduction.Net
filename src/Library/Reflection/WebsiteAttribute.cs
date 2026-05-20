@@ -3,7 +3,7 @@
 namespace DigitalProduction.Reflection;
 
 /// <summary>
-/// An attribute to add additional authors to the assembly.
+/// An attribute to add a website to the assembly.
 /// </summary>
 [AttributeUsage(AttributeTargets.Assembly)]
 public class WebsiteAttribute : Attribute

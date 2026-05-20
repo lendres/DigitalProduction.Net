@@ -1,4 +1,4 @@
-﻿namespace DigitalProduction.ComponentModel;
+﻿namespace DigitalProduction.Reflection;
 
 /// <summary>
 /// Attribute for applying alternate names to a class.

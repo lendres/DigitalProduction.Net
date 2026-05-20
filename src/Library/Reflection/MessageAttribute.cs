@@ -6,9 +6,6 @@
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = false)]
 public class MessageAttribute : Attribute
 {
-	#region Fields
-	#endregion
-
 	#region Construction
 
 	/// <summary>
@@ -35,9 +32,6 @@ public class MessageAttribute : Attribute
 	/// </summary>
 	public string Message { get; private set; } = "";
 	
-	#endregion
-
-	#region Methods
 	#endregion
 
 } // End class.
