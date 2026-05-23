@@ -1,4 +1,6 @@
-﻿namespace DigitalProduction.Strings;
+﻿using System.Text.RegularExpressions;
+
+namespace DigitalProduction.Strings;
 
 public static class Extensions
 {
@@ -93,17 +95,58 @@ public static class Extensions
 			return firstString == secondString;
 		}
 
-		string normalizedFirstString	= NormalizeLineEndings(firstString);
-		string normalizedSecondString	= NormalizeLineEndings(secondString);
+		string normalizedFirstString	= firstString.NormalizeLineEndings();
+		string normalizedSecondString	= secondString.NormalizeLineEndings();
 
 		return normalizedFirstString == normalizedSecondString;
 	}
 
-	private static string NormalizeLineEndings(string text)
+	/// <summary>
+	/// Normalizes line endings in the input string to a specified line ending. If no line ending is provided,
+	/// it defaults to the system's newline character(s).
+	/// </summary>
+	/// <param name="text">The input string.</param>
+	/// <param name="lineEnding">The line ending to replace with.</param>
+	/// <returns>The string with line endings normalized.</returns>
+	public static string NormalizeLineEndings(this string text, string? lineEnding = "")
 	{
-		return text
-			.Replace("\r\n", "\n")
-			.Replace('\r', '\n');
+		if (string.IsNullOrEmpty(lineEnding))
+		{
+			lineEnding = Environment.NewLine;
+		}
+		return ReplaceAllLineEndings(text, lineEnding);
+	}
+
+	/// <summary>
+	/// Removes the last line ending from the input string.
+	/// </summary>
+	/// <param name="text">The input string.</param>
+	/// <returns>The string with the last line ending removed.</returns>
+	public static string RemoveLastLineEnding(this string text)
+	{
+		return text.TrimEnd("\r\n", "\r", "\n");)
+	}
+
+	/// <summary>
+	/// Removes all line endings from the input string, effectively concatenating all lines into a single line.
+	/// </summary>
+	/// <param name="text">The input string.</param>
+	/// <returns>The string with all line endings removed.</returns>
+	public static string RemoveAllLineEnding(this string text)
+	{
+		return ReplaceAllLineEndings(text, string.Empty);
+	}
+
+	/// <summary>
+	/// Replaces all types of line endings in the input string with a specified line ending. This method handles
+	/// Windows (\r\n), Unix (\n), and old Mac (\r) line endings.
+	/// </summary>
+	/// <param name="text">The input string.</param>
+	/// <param name="lineEnding">The line ending to replace with.</param>
+	/// <returns>The string with line endings replaced.</returns>
+	private static string ReplaceAllLineEndings(string text, string lineEnding)
+	{
+		return Regex.Replace(text, @"\r\n|\r(?!\n)|(?<!\r)\n", lineEnding);
 	}
 
 	#endregion
