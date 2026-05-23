@@ -124,7 +124,7 @@ public static class Extensions
 	/// <returns>The string with the last line ending removed.</returns>
 	public static string RemoveLastLineEnding(this string text)
 	{
-		return text.TrimEnd("\r\n", "\r", "\n");)
+		return text.TrimEnd("\r\n", "\r", "\n");
 	}
 
 	/// <summary>

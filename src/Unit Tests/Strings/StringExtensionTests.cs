@@ -171,4 +171,103 @@ public class StringExtensionsTests
 	}
 
 	#endregion
+
+	#region Line Ending Removeal Tests
+
+	#region RemoveLastLineEnding Tests
+
+	[Theory]
+	[InlineData("Line1\r\n", "Line1")]
+	[InlineData("Line1\r", "Line1")]
+	[InlineData("Line1\n", "Line1")]
+	[InlineData("Line1", "Line1")]
+	[InlineData("", "")]
+	public void RemoveLastLineEndingReturnsExpectedResult(string text, string expectedResult)
+	{
+		string result = text.RemoveLastLineEnding();
+		Assert.Equal(expectedResult, result);
+	}
+
+	[Theory]
+	[InlineData("Line1\r\n\r\n", "Line1")]
+	[InlineData("Line1\n\n", "Line1")]
+	[InlineData("Line1\r\r", "Line1")]
+	public void RemoveLastLineEndingOnlyRemovesFinalLineEnding(string text, string expectedResult)
+	{
+		string result = text.RemoveLastLineEnding();
+		Assert.Equal(expectedResult, result);
+	}
+
+	[Fact]
+	public void RemoveLastLineEndingDoesNotPartiallyRemoveWindowsLineEnding()
+	{
+		string text = "Line1\r\n";
+		string result = text.RemoveLastLineEnding();
+		Assert.Equal("Line1", result);
+	}
+
+	[Theory]
+	[InlineData("Line1\r\nLine2\r\n", "Line1\r\nLine2")]
+	[InlineData("Line1\rLine2\r", "Line1\rLine2")]
+	[InlineData("Line1\nLine2\n", "Line1\nLine2")]
+	public void RemoveLastLineEndingPreservesInternalLineEndings(string text, string expectedResult)
+	{
+		string result = text.RemoveLastLineEnding();
+
+		Assert.Equal(expectedResult, result);
+	}
+
+	#endregion
+
+	#region RemoveAllLineEnding Tests
+
+	[Theory]
+	[InlineData("Line1\r\nLine2", "Line1Line2")]
+	[InlineData("Line1\rLine2", "Line1Line2")]
+	[InlineData("Line1\nLine2", "Line1Line2")]
+	[InlineData("Line1\r\nLine2\rLine3\nLine4", "Line1Line2Line3Line4")]
+	[InlineData("Line1", "Line1")]
+	[InlineData("", "")]
+	public void RemoveAllLineEndingReturnsExpectedResult(string text, string expectedResult)
+	{
+		string result = text.RemoveAllLineEnding();
+		Assert.Equal(expectedResult, result);
+	}
+
+	[Fact]
+	public void RemoveAllLineEndingRemovesWindowsLineEndingsWithoutPartialReplacement()
+	{
+		string text = "Line1\r\nLine2\r\nLine3";
+		string result = text.RemoveAllLineEnding();
+		Assert.Equal("Line1Line2Line3", result);
+	}
+
+	[Theory]
+	[InlineData("\r\n", "")]
+	[InlineData("\r", "")]
+	[InlineData("\n", "")]
+	[InlineData("\r\n\r\n", "")]
+	[InlineData("\r\r", "")]
+	[InlineData("\n\n", "")]
+	public void RemoveAllLineEndingRemovesOnlyLineEndings(string text, string expectedResult)
+	{
+		string result = text.RemoveAllLineEnding();
+		Assert.Equal(expectedResult, result);
+	}
+
+	[Theory]
+	[InlineData("A\r\nB\r\nC", "ABC")]
+	[InlineData("A\rB\rC", "ABC")]
+	[InlineData("A\nB\nC", "ABC")]
+	[InlineData("A\r\nB\rC\nD", "ABCD")]
+	public void RemoveAllLineEndingHandlesMixedLineEndingStyles(string text, string expectedResult)
+	{
+		string result = text.RemoveAllLineEnding();
+		Assert.Equal(expectedResult, result);
+	}
+
+	#endregion
+
+
+	#endregion
 }
