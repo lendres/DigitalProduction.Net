@@ -268,6 +268,5 @@ public class StringExtensionsTests
 
 	#endregion
 
-
 	#endregion
 }
