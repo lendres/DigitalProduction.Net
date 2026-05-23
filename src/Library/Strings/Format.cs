@@ -38,6 +38,8 @@ public static class Format
 	/// </summary>
 	/// <param name="target">Current string.</param>
 	/// <param name="trimStrings">The strings to remove from the current string.</param>
+	[Obsolete("Use DigitalProduction.Strings.Extensions.TrimStart instead (stringVariable.TrimStart(...)).")]
+
 	public static string TrimStart(string target, string[] trimStrings)
 	{
 		string result = target;
@@ -53,6 +55,7 @@ public static class Format
 	/// </summary>
 	/// <param name="target">Current string.</param>
 	/// <param name="trimString">The string to remove from the current string.</param>
+	[Obsolete("Use DigitalProduction.Strings.Extensions.TrimStart instead (stringVariable.TrimStart(...)).")]
 	public static string TrimStart(string target, string trimString)
 	{
 		if (string.IsNullOrEmpty(trimString)) return target;
@@ -71,6 +74,7 @@ public static class Format
 	/// </summary>
 	/// <param name="target">Current string.</param>
 	/// <param name="trimStrings">The strings to remove from the current string.</param>
+	[Obsolete("Use DigitalProduction.Strings.Extensions.TrimEnd instead (stringVariable.TrimEnd(...)).")]
 	public static string TrimEnd(string target, string[] trimStrings)
 	{
 		string result = target;
@@ -86,6 +90,7 @@ public static class Format
 	/// </summary>
 	/// <param name="target">Current string.</param>
 	/// <param name="trimString">The string to remove from the current string.</param>
+	[Obsolete("Use DigitalProduction.Strings.Extensions.TrimEnd instead (stringVariable.TrimEnd(...)).")]
 	public static string TrimEnd(string target, string trimString)
 	{
 		if (string.IsNullOrEmpty(trimString))

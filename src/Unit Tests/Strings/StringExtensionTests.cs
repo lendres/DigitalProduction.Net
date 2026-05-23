@@ -4,6 +4,8 @@ namespace DigitalProduction.UnitTests;
 
 public class StringExtensionsTests
 {
+	#region Line Ending Comparison Tests
+
 	[Fact]
 	public void EqualsIgnoringLineEndingsReturnsTrueForIdenticalStrings()
 	{
@@ -113,4 +115,6 @@ public class StringExtensionsTests
 
 		Assert.True(result);
 	}
+
+	#endregion
 }
