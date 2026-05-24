@@ -24,6 +24,14 @@ public class SerializableDictionary<KeyType, ValueType> : Dictionary<KeyType, Va
 	{
 	}
 
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
+	public SerializableDictionary(SerializableDictionary<KeyType, ValueType> other) :
+		base(other)
+	{
+	}
+
 	#endregion
 
 	#region XML
