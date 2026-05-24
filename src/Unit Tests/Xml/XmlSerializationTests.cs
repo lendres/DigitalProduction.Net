@@ -163,9 +163,7 @@ public class XmlSerializationTests
     public void DeserializeObjectFromString_ValidPersonXml_ReturnsPerson()
     {
         // Arrange.
-        string xml = """
-            <person name="Alice" age="35" gender="Female" employed="true" />
-            """;
+        string xml = """<person name="Alice" age="35" gender="Female" employed="true"/> """;
 
         // Act.
         Person? result = Serialization.DeserializeObjectFromString<Person>(xml);
@@ -182,9 +180,7 @@ public class XmlSerializationTests
     public void DeserializeObjectFromString_ValidPersonXmlWithFalseEmployment_ReturnsPerson()
     {
         // Arrange.
-        string xml = """
-            <person name="Bob" age="42" gender="Male" employed="false" />
-            """;
+        string xml = """<person name="Bob" age="42" gender="Male" employed="false"/>""";
 
         // Act.
         Person? result = Serialization.DeserializeObjectFromString<Person>(xml);
@@ -201,9 +197,7 @@ public class XmlSerializationTests
     public void DeserializeObjectFromString_MissingOptionalAttributes_UsesDefaults()
     {
         // Arrange.
-        string xml = """
-            <person name="Carol" age="28" />
-            """;
+        string xml = """<person name="Carol" age="28"/>""";
 
         // Act.
         Person? result = Serialization.DeserializeObjectFromString<Person>(xml);
@@ -248,9 +242,7 @@ public class XmlSerializationTests
     public void DeserializeObjectFromString_InvalidAge_ThrowsInvalidOperationException()
     {
         // Arrange.
-        string xml = """
-            <person name="Alice" age="NotAnInteger" gender="Female" employed="true" />
-            """;
+        string xml = """<person name="Alice" age="NotAnInteger" gender="Female" employed="true"/>""";
 
         // Act and assert.
         Assert.Throws<InvalidOperationException>(
@@ -261,9 +253,7 @@ public class XmlSerializationTests
     public void DeserializeObjectFromString_WrongRootElement_ThrowsInvalidOperationException()
     {
         // Arrange.
-        string xml = """
-            <Person name="Alice" age="35" gender="Female" employed="true" />
-            """;
+        string xml = """<Person name="Alice" age="35" gender="Female" employed="true"/>""";
 
         // Act and assert.
         Assert.Throws<InvalidOperationException>(
