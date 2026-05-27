@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace DigitalProduction.ComponentModel;
 
@@ -20,6 +21,7 @@ public abstract class NotifyPropertyChanged : GenericProperties, INotifyProperty
 	/// Specifies whether the PropertyChanged event should be invoked when a property value is changed.
 	/// This can be used to temporarily disable change events when making multiple changes to a class.
 	/// </summary>
+	[XmlIgnore()]
 	public bool InvokeChangeEvents { get; set; } = true;
 
 	#endregion
