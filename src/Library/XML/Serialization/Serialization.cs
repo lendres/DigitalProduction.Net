@@ -18,11 +18,11 @@ public static class Serialization
 	/// <param name="settings">SerializationSettings to use for writing.</param>
 	public static void SerializeObject(SerializationSettings settings)
 	{
-		XmlSerializer serializer	= new(settings.SerializeType);
-		XmlWriter xmlwriter			= XmlWriter.Create(settings.OutputFile, settings.XmlSettings);
-
-		serializer.Serialize(xmlwriter, settings.SerializeObject);
-		xmlwriter.Close();
+		XmlSerializer serializer = new(settings.SerializeType);
+		using (XmlWriter xmlwriter = XmlWriter.Create(settings.OutputFile, settings.XmlSettings))
+		{
+			serializer.Serialize(xmlwriter, settings.SerializeObject);
+		}
 	}
 
 	/// <summary>
@@ -42,12 +42,12 @@ public static class Serialization
 	/// <param name="settings">SerializationSettings to use for writing.</param>
 	public static void SerializeObjectFullEndElement(SerializationSettings settings)
 	{
-		XmlSerializer serializer				= new(settings.SerializeType);
-		XmlTextWriterFullEndElement textwriter	= new(settings.OutputFile, settings.XmlSettings);
-		XmlWriter xmlwriter						= XmlTextWriterFullEndElement.Create(textwriter, settings.XmlSettings);
-
-		serializer.Serialize(xmlwriter, settings.SerializeObject);
-		xmlwriter.Close();
+		XmlSerializer serializer = new(settings.SerializeType);
+		using (XmlTextWriterFullEndElement textwriter	= new(settings.OutputFile, settings.XmlSettings))
+		{
+			XmlWriter xmlwriter	= XmlTextWriterFullEndElement.Create(textwriter, settings.XmlSettings);
+			serializer.Serialize(xmlwriter, settings.SerializeObject);
+		}
 	}
 
 	/// <summary>
@@ -72,19 +72,33 @@ public static class Serialization
 	/// <param name="file">File to deserialize from.</param>
 	public static T? DeserializeObject<T>(string file)
 	{
-		XmlSerializer serializer			= new(typeof(T));
-		XIncludingReader xmlincludingreader	= new(file);
-		T? deserializedobject				= (T?)serializer.Deserialize(xmlincludingreader);
-		xmlincludingreader.Close();
-
-		return deserializedobject;
+		XmlSerializer serializer = new(typeof(T));
+		using (XIncludingReader xmlincludingreader	= new(file))
+		{
+			return (T?)serializer.Deserialize(xmlincludingreader);
+		}
 	}
 
-    #endregion
+	/// <summary>
+	/// Deserialize an object from a file.
+	/// </summary>
+	/// <typeparam name="T">Type of object to deserialize.</typeparam>
+	/// <param name="file">File to deserialize from.</param>
+	public static T? DeserializeWithoutIncluding<T>(string file)
+	{
+		XmlSerializer serializer = new(typeof(T));
 
-    #region String Serialization
+		using (StreamReader streamReader = new(file))
+		{
+			return (T?)serializer.Deserialize(streamReader);
+		}
+	}
 
-    public static string SerializeObjectToString<T>(T obj)
+	#endregion
+
+	#region String Serialization
+
+	public static string SerializeObjectToString<T>(T obj)
     {
         if (obj == null)
         {
